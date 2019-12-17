@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
 import P5 from '../P5';
 
-export default function Circle({
+export default function Arc({
     render,
     x,
     y,
     size,
+    start,
+    stop,
     fillColor = 0,
     strokeColor = 0,
     noFill,
@@ -23,9 +25,20 @@ export default function Circle({
             else p.stroke(strokeColor);
             if (strokeWeight) p.strokeWeight(strokeWeight);
 
-            p.ellipse(x, y, size, size);
+            p.arc(x, y, size, size, start, stop);
         },
-        [fillColor, x, y, size, noFill, noStroke, strokeColor, strokeWeight]
+        [
+            noFill,
+            fillColor,
+            noStroke,
+            strokeColor,
+            strokeWeight,
+            x,
+            y,
+            size,
+            start,
+            stop
+        ]
     );
 
     return <P5.Block onRender={onRender} />;
