@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import P5 from '../P5';
 
 export default function Arc({
-    render,
+    p,
     x,
     y,
     size,
@@ -41,5 +41,5 @@ export default function Arc({
         ]
     );
 
-    return <P5.Block onRender={onRender} />;
+    return <P5.Block pInstance={p} onRender={onRender} />;
 }

@@ -18,7 +18,7 @@ export const useP5 = () => {
     return context;
 };
 
-function P5({ className = '', canvasClassName = '', children, ...props }) {
+function P5({ frameRate, className = '', canvasClassName = '', children, ...props }) {
     const canvasRef = useRef(null);
     const drawBlocks = useRef([]);
     const setupBlocks = useRef([]);
@@ -60,18 +60,22 @@ function P5({ className = '', canvasClassName = '', children, ...props }) {
                 return canvas;
             };
             p.setup = () => {
+                if (frameRate) {
+                    p.frameRate(frameRate)
+                }
                 setupBlocks.current.forEach(block => {
                     block(p, canvasRef.current);
                 });
             };
 
             p.draw = () => {
+                p.clear();
                 drawBlocks.current.forEach(block => {
                     block(p);
                 });
             };
         },
-        [canvasClassName]
+        [canvasClassName, frameRate]
     );
 
     useEffect(() => {
@@ -112,14 +116,19 @@ function P5Setup({ children }) {
 }
 export const Setup = memo(P5Setup);
 
-function P5Block({ onRender, ...props }) {
+function P5Block({ pInstance, onRender, ...props }) {
     const { render } = useContext(p5RenderContext);
 
     useEffect(() => {
-        render((p, canvasRef) => {
-            onRender(p, canvasRef);
+        const remove = render((p, canvasRef) => {
+            let pContext = pInstance ? pInstance : p;
+            if (pContext.current) pContext = pContext.current;
+            onRender(pContext, canvasRef);
         });
-    }, [render, onRender]);
+        return () => {
+            remove()
+        }
+    }, [render, onRender, pInstance]);
 
     return null;
 }

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import P5 from '../P5';
 
-export default function Canvas({ render, width, height, background }) {
+export default function Canvas({ width, height, background }) {
     const onRender = useCallback(
         p => {
             p.createCanvas(width, height);
