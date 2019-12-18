@@ -5,7 +5,7 @@ import handleCommonProps from '../../utils/handleCommonProps';
 export default function Square({ p, x, y, size, ...props }) {
     const onRender = useCallback(
         p => {
-            handleCommonProps(props);
+            handleCommonProps(props, p);
             p.square(x, y, size);
         },
         [x, y, size, props]

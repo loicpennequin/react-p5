@@ -26,6 +26,18 @@ export default function App() {
                     />
                 </P5.Setup>
                 <P5.Draw>
+                    {/* <Layer>
+                        {layer => (
+                            <Circle
+                                p={layer}
+                                x={250}
+                                y={250}
+                                size={350}
+                                noStroke
+                                fillColor="#ffe680"
+                            />
+                        )}
+                    </Layer> */}
                     <SmileyFace />
                 </P5.Draw>
             </P5>

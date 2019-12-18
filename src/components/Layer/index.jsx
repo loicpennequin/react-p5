@@ -7,6 +7,8 @@ export default function Layer({
     y,
     width,
     height,
+    blendMode = 'BLEND',
+    opacity = 255,
     autoApply = true
 }) {
     const layer = useRef();
@@ -41,6 +43,8 @@ export default function Layer({
                     cb(layer, img);
                 });
 
+                p.blendMode(p[blendMode]);
+                p.tint(255, opacity);
                 p.image(img, x, y, width, height);
 
                 beforeApplyCallbacks.current = [];
@@ -48,7 +52,7 @@ export default function Layer({
 
             updateLayer(layer);
         },
-        [updateLayer]
+        [blendMode, opacity, updateLayer]
     );
 
     const apply = useCallback(() => {
