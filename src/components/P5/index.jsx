@@ -24,6 +24,7 @@ function P5({
     className = '',
     canvasClassName = '',
     children,
+    debug,
     ...props
 }) {
     const canvasRef = useRef(null);
@@ -32,38 +33,49 @@ function P5({
     const [p5Instance, setP5Instance] = useState();
 
     useEffect(() => {
-        if (loop) {
-            // eslint-disable-next-line no-unused-expressions
-            p5Instance?.loop?.();
-        } else {
-            // eslint-disable-next-line no-unused-expressions
-            p5Instance?.noLoop?.();
+        if (p5Instance?._renderer) {
+            if (loop) {
+                // eslint-disable-next-line no-unused-expressions
+                p5Instance.loop();
+            } else {
+                // eslint-disable-next-line no-unused-expressions
+                p5Instance.noLoop();
+            }
         }
     }, [p5Instance, loop]);
 
     const p5ContextAPI = useMemo(
         () => ({
-            defineDrawBlock(block) {
-                drawBlocks.current.push(block);
+            defineDrawBlock(block, index) {
+                if (index !== undefined) {
+                    drawBlocks.current.splice(index, 0, block);
+                } else {
+                    drawBlocks.current.push(block);
+                }
                 return function clear() {
-                    drawBlocks.current = drawBlocks.current.filter(
-                        b => b !== block
-                    );
+                    const idx = drawBlocks.current.findIndex(b => b === block);
+                    drawBlocks.current.splice(idx, 1);
+                    return idx;
                 };
             },
 
-            defineSetupBlock(block) {
-                setupBlocks.current.push(block);
+            defineSetupBlock(block, index) {
+                if (index !== undefined) {
+                    setupBlocks.current.splice(index, 0, block);
+                } else {
+                    setupBlocks.current.push(block);
+                }
                 return function clear() {
-                    setupBlocks.current = setupBlocks.current.filter(
-                        b => b !== block
-                    );
+                    const idx = setupBlocks.current.findIndex(b => b === block);
+                    setupBlocks.current.splice(idx, 1);
+                    return idx;
                 };
             },
 
-            p5Instance
+            p5Instance,
+            debug
         }),
-        [p5Instance]
+        [debug, p5Instance]
     );
 
     const sketchConfig = useMemo(
@@ -77,6 +89,9 @@ function P5({
                 return canvas;
             };
             p.setup = () => {
+                if (debug) {
+                    console.log('=========SETUP');
+                }
                 if (frameRate) {
                     p.frameRate(frameRate);
                 }
@@ -86,13 +101,16 @@ function P5({
             };
 
             p.draw = () => {
+                if (debug) {
+                    console.log('=========DRAW');
+                }
                 p.clear();
                 drawBlocks.current.forEach(block => {
                     block(p);
                 });
             };
         },
-        [canvasClassName, frameRate]
+        [canvasClassName, debug, frameRate]
     );
 
     useEffect(() => {
@@ -135,15 +153,16 @@ export const Setup = memo(P5Setup);
 
 function P5Block({ pInstance, onRender, ...props }) {
     const { render } = useContext(p5RenderContext);
+    const blockIndex = useRef();
 
     useEffect(() => {
-        const remove = render((p, canvasRef) => {
+        const clear = render((p, canvasRef) => {
             let pContext = pInstance ? pInstance : p;
             if (pContext.current) pContext = pContext.current;
             onRender(pContext, canvasRef);
-        });
+        }, blockIndex.current);
         return () => {
-            remove();
+            blockIndex.current = clear();
         };
     }, [render, onRender, pInstance]);
 

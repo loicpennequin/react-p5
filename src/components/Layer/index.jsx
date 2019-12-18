@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { Block } from '../P5';
+import { Block, useP5 } from '../P5';
 
 export default function Layer({
     children,
@@ -13,7 +13,7 @@ export default function Layer({
 }) {
     const layer = useRef();
     const beforeApplyCallbacks = useRef([]);
-
+    const { debug } = useP5();
     const updateLayer = useCallback(newLayer => {
         if (layer.current) {
             layer.current.remove();
@@ -24,7 +24,7 @@ export default function Layer({
     const onRender = useCallback(
         p => {
             const layer = p.createGraphics(p.width, p.height);
-
+            layer.__id = Math.random();
             layer.onBeforeApply = cb => {
                 beforeApplyCallbacks.current.push(cb);
             };
@@ -35,6 +35,7 @@ export default function Layer({
                 width = p.width,
                 height = p.height
             }) => {
+                if (debug) console.log('apply layer', layer.__id);
                 const copyProps = [0, 0, layer.width, layer.height];
                 const img = p.createImage(width, height);
                 img.copy(layer, ...copyProps, ...copyProps);
@@ -52,7 +53,7 @@ export default function Layer({
 
             updateLayer(layer);
         },
-        [blendMode, opacity, updateLayer]
+        [blendMode, debug, opacity, updateLayer]
     );
 
     const apply = useCallback(() => {
