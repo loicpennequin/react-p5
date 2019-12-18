@@ -20,6 +20,7 @@ export const useP5 = () => {
 
 function P5({
     frameRate,
+    loop = true,
     className = '',
     canvasClassName = '',
     children,
@@ -29,6 +30,16 @@ function P5({
     const drawBlocks = useRef([]);
     const setupBlocks = useRef([]);
     const [p5Instance, setP5Instance] = useState();
+
+    useEffect(() => {
+        if (loop) {
+            // eslint-disable-next-line no-unused-expressions
+            p5Instance?.loop?.();
+        } else {
+            // eslint-disable-next-line no-unused-expressions
+            p5Instance?.noLoop?.();
+        }
+    }, [p5Instance, loop]);
 
     const p5ContextAPI = useMemo(
         () => ({

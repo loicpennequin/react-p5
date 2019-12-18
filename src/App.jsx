@@ -11,18 +11,25 @@ const constants = {
 };
 
 export default function App() {
+    const [loop, setLoop] = useState(false);
+
     return (
-        <P5 canvasClassName="canvas" frameRate={10}>
-            <P5.Setup>
-                <Canvas
-                    width={constants.CANVAS_WIDTH}
-                    height={constants.CANVAS_HEIGHT}
-                />
-            </P5.Setup>
-            <P5.Draw>
-                <SmileyFace />
-            </P5.Draw>
-        </P5>
+        <>
+            <button onClick={() => setLoop(loop => !loop)}>
+                {loop ? 'Stop' : 'Start'} loop
+            </button>
+            <P5 canvasClassName="canvas" loop={loop}>
+                <P5.Setup>
+                    <Canvas
+                        width={constants.CANVAS_WIDTH}
+                        height={constants.CANVAS_HEIGHT}
+                    />
+                </P5.Setup>
+                <P5.Draw>
+                    <SmileyFace />
+                </P5.Draw>
+            </P5>
+        </>
     );
 }
 

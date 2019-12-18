@@ -2,17 +2,15 @@ import React, { useCallback } from 'react';
 import { Block } from '../P5';
 import Layer from '../Layer';
 
-export default function Circle({
-    render,
-    target,
-    children
-}) {
+export default function Circle({ render, target, children }) {
     const onRender = useCallback(
         p => {
             if (target.current) {
                 target.current.onBeforeApply((layer, img) => {
                     const maskImage = p.createImage(p.width, p.height);
-                    maskImage.copy(p, 0, 0, p.width, p.height, 0, 0, p.width, p.height)
+                    const copyProps = [0, 0, p.width, p.height];
+
+                    maskImage.copy(p, ...copyProps, ...copyProps);
                     img.mask(maskImage);
                 });
             }
@@ -29,5 +27,5 @@ export default function Circle({
                 </>
             )}
         </Layer>
-    )
+    );
 }

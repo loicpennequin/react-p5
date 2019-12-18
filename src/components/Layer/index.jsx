@@ -22,8 +22,7 @@ export default function Layer({
     const onRender = useCallback(
         p => {
             const layer = p.createGraphics(p.width, p.height);
-            const id = Math.random();
-            layer.__id = id;
+
             layer.onBeforeApply = cb => {
                 beforeApplyCallbacks.current.push(cb);
             };
@@ -34,25 +33,19 @@ export default function Layer({
                 width = p.width,
                 height = p.height
             }) => {
+                const copyProps = [0, 0, layer.width, layer.height];
                 const img = p.createImage(width, height);
-                img.copy(
-                    layer,
-                    0,
-                    0,
-                    layer.width,
-                    layer.height,
-                    0,
-                    0,
-                    layer.width,
-                    layer.height
-                );
+                img.copy(layer, ...copyProps, ...copyProps);
 
                 beforeApplyCallbacks.current.forEach(cb => {
                     cb(layer, img);
                 });
+
                 p.image(img, x, y, width, height);
+
                 beforeApplyCallbacks.current = [];
             };
+
             updateLayer(layer);
         },
         [updateLayer]

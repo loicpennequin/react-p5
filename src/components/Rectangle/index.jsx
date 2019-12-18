@@ -1,15 +1,14 @@
 import React, { useCallback } from 'react';
-import handleCommonProps from '../../utils/handleCommonProps';
 import P5 from '../P5';
+import handleCommonProps from '../../utils/handleCommonProps';
 
-export default function Arc({ p, x, y, size, start, stop, ...props }) {
+export default function Rectangle({ p, x, y, height, width, ...props }) {
     const onRender = useCallback(
         p => {
             handleCommonProps(props);
-
-            p.arc(x, y, size, size, start, stop);
+            p.rectangle(x, y, width, height);
         },
-        [x, y, size, start, stop, props]
+        [x, y, height, width, props]
     );
 
     return <P5.Block pInstance={p} onRender={onRender} />;
