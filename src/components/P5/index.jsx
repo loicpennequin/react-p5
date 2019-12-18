@@ -18,7 +18,13 @@ export const useP5 = () => {
     return context;
 };
 
-function P5({ frameRate, className = '', canvasClassName = '', children, ...props }) {
+function P5({
+    frameRate,
+    className = '',
+    canvasClassName = '',
+    children,
+    ...props
+}) {
     const canvasRef = useRef(null);
     const drawBlocks = useRef([]);
     const setupBlocks = useRef([]);
@@ -61,7 +67,7 @@ function P5({ frameRate, className = '', canvasClassName = '', children, ...prop
             };
             p.setup = () => {
                 if (frameRate) {
-                    p.frameRate(frameRate)
+                    p.frameRate(frameRate);
                 }
                 setupBlocks.current.forEach(block => {
                     block(p, canvasRef.current);
@@ -126,8 +132,8 @@ function P5Block({ pInstance, onRender, ...props }) {
             onRender(pContext, canvasRef);
         });
         return () => {
-            remove()
-        }
+            remove();
+        };
     }, [render, onRender, pInstance]);
 
     return null;

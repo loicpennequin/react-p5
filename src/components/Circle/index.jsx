@@ -26,6 +26,6 @@ export default function Circle({
         },
         [fillColor, x, y, size, noFill, noStroke, strokeColor, strokeWeight]
     );
-    
+
     return <P5.Block pInstance={p} onRender={onRender} />;
 }

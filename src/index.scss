@@ -8,9 +8,15 @@ body {
     font-family: Helvetica;
     height: 100vh;
     overflow: hidden;
+    background: radial-gradient(circle at center, #666, #222);
 }
 
+#root {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .canvas {
-    margin: 1em;
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.35);
 }
