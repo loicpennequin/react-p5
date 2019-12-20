@@ -7,18 +7,16 @@ export default function Mask({ render, target, debug = false, children }) {
         p => {
             if (target.current) {
                 target.current.onBeforeApply((layer, img) => {
-                    console.log('applying mask');
+                    console.log('applying mask on layer', target.current.__id);
                     const maskImage = p.createImage(p.width, p.height);
                     const copyProps = [0, 0, p.width, p.height];
 
                     maskImage.copy(p, ...copyProps, ...copyProps);
-                    if (!debug) {
-                        img.mask(maskImage);
-                    }
+                    img.mask(maskImage);
                 });
             }
         },
-        [debug, target]
+        [target]
     );
 
     return (

@@ -9,6 +9,8 @@ import React, {
 } from 'react';
 import p5 from 'p5';
 
+p5.disableFriendlyErrors = true;
+
 const p5Context = createContext(null);
 const p5RenderContext = createContext(null);
 
@@ -30,19 +32,7 @@ function P5({
     const canvasRef = useRef(null);
     const drawBlocks = useRef([]);
     const setupBlocks = useRef([]);
-    const [p5Instance, setP5Instance] = useState();
-
-    useEffect(() => {
-        if (p5Instance?._renderer) {
-            if (loop) {
-                // eslint-disable-next-line no-unused-expressions
-                p5Instance.loop();
-            } else {
-                // eslint-disable-next-line no-unused-expressions
-                p5Instance.noLoop();
-            }
-        }
-    }, [p5Instance, loop]);
+    const [p5Instance, setP5Instance] = useState(new p5());
 
     const p5ContextAPI = useMemo(
         () => ({
@@ -80,7 +70,6 @@ function P5({
 
     const sketchConfig = useMemo(
         () => p => {
-            setP5Instance(p);
             p._createCanvas = p.createCanvas;
             p.createCanvas = (...args) => {
                 const canvas = p._createCanvas(...args);
@@ -90,7 +79,8 @@ function P5({
             };
             p.setup = () => {
                 if (debug) {
-                    console.log('=========SETUP');
+                    console.group('=========SETUP');
+                    console.log('Setup blocks :', setupBlocks.current.length);
                 }
                 if (frameRate) {
                     p.frameRate(frameRate);
@@ -98,23 +88,33 @@ function P5({
                 setupBlocks.current.forEach(block => {
                     block(p, canvasRef.current);
                 });
+                //p.noLoop();
+                if (debug) {
+                    console.groupEnd()
+                }
             };
 
             p.draw = () => {
                 if (debug) {
-                    console.log('=========DRAW');
+                    console.group('=========DRAW');
+                    console.log('Draw blocks :', drawBlocks.current.length)
                 }
                 p.clear();
                 drawBlocks.current.forEach(block => {
                     block(p);
                 });
+
+                if (debug) {
+                    console.groupEnd();
+                }
             };
+            setP5Instance(p);
         },
         [canvasClassName, debug, frameRate]
     );
 
-    useEffect(() => {
-        new p5(sketchConfig);
+    useEffect(() => { 
+        new p5(sketchConfig);   
     }, [sketchConfig]);
 
     return (
@@ -159,7 +159,12 @@ function P5Block({ pInstance, onRender, ...props }) {
         const clear = render((p, canvasRef) => {
             let pContext = pInstance ? pInstance : p;
             if (pContext.current) pContext = pContext.current;
-            onRender(pContext, canvasRef);
+            try {
+                onRender(pContext, canvasRef);
+            } catch (err) {
+                console.error(err);
+            }
+
         }, blockIndex.current);
         return () => {
             blockIndex.current = clear();

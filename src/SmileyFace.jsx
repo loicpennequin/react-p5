@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import P5, { useP5 } from './components/P5';
+import { useP5 } from './components/P5';
 import Layer from './components/Layer';
 import Mask from './components/Mask';
 import Circle from './components/Circle';
@@ -8,9 +8,9 @@ import Arc from './components/Arc';
 export default function SmileyFace() {
     return (
         <>
-            <Circle x={250} y={250} size={350} noStroke fillColor="#ffe680" />
+            {/* <Circle x={250} y={250} size={350} noStroke fillColor="#ffe680" /> */}
             <Eyes />
-            <Smile />
+            {/* <Smile /> */}
         </>
     );
 }
@@ -31,7 +31,7 @@ function Eye({ layer, initialX }) {
         <>
             <Circle
                 p={layer}
-                x={initialX + 30}
+                x={initialX + 20}
                 y={200}
                 size={75}
                 noStroke
@@ -47,15 +47,14 @@ function Eye({ layer, initialX }) {
             />
             <Mask target={layer}>
                 {pMask => (
-                    <>
-                        <Circle
-                            p={pMask}
-                            x={initialX + 30}
-                            y={200}
-                            size={75}
-                            noStroke
-                        />
-                    </>
+                    <Circle
+                        p={pMask}
+                        x={initialX + 20}
+                        y={200}
+                        size={75}
+                        noStroke
+                        fillColor={0}
+                    />
                 )}
             </Mask>
         </>
@@ -64,11 +63,11 @@ function Eye({ layer, initialX }) {
 function Eyes() {
     return (
         <>
-            <Layer>
+            <Layer id="eyes">
                 {layer => (
                     <>
-                        <Eye layer={layer} initialX={155} />
                         <Eye layer={layer} initialX={295} />
+                        <Eye layer={layer} initialX={155} />
                     </>
                 )}
             </Layer>
@@ -78,11 +77,8 @@ function Eyes() {
 
 function Smile() {
     const { p5Instance } = useP5();
-
-    if (!p5Instance) return null;
-
     return (
-        <Layer>
+        <Layer id="smile">
             {layer => (
                 <>
                     <Arc
