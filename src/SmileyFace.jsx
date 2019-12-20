@@ -15,23 +15,22 @@ export default function SmileyFace() {
     );
 }
 
-function Eye({ layer, initialX }) {
+function Eye({ layer, mask, initialX }) {
     const { defineDrawBlock } = useP5();
     const [eyeX, setEyeX] = useState(initialX);
 
     useEffect(() => {
         const clear = defineDrawBlock(p => {
-            setEyeX(p.map(p.mouseX, 0, p.width, initialX, initialX + 20));
+            setEyeX(p.map(p.mouseX, 0, p.width, initialX, initialX + 25));
         });
 
         return clear;
     }, [defineDrawBlock, initialX]);
-
     return (
         <>
             <Circle
                 p={layer}
-                x={initialX + 20}
+                x={initialX + 10}
                 y={200}
                 size={75}
                 noStroke
@@ -45,18 +44,14 @@ function Eye({ layer, initialX }) {
                 noStroke
                 fillColor="black"
             />
-            <Mask target={layer}>
-                {pMask => (
-                    <Circle
-                        p={pMask}
-                        x={initialX + 20}
-                        y={200}
-                        size={75}
-                        noStroke
-                        fillColor={0}
-                    />
-                )}
-            </Mask>
+            <Circle
+                p={mask}
+                x={initialX + 10}
+                y={200}
+                size={75}
+                noStroke
+                fillColor={0}
+            />
         </>
     );
 }
@@ -65,10 +60,22 @@ function Eyes() {
         <>
             <Layer id="eyes">
                 {layer => (
-                    <>
-                        <Eye layer={layer} initialX={295} />
-                        {/* <Eye layer={layer} initialX={155} /> */}
-                    </>
+                    <Mask target={layer}>
+                        {pMask => (
+                            <>
+                                <Eye
+                                    layer={layer}
+                                    mask={pMask}
+                                    initialX={165}
+                                />
+                                <Eye
+                                    layer={layer}
+                                    mask={pMask}
+                                    initialX={305}
+                                />
+                            </>
+                        )}
+                    </Mask>
                 )}
             </Layer>
         </>

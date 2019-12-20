@@ -1,12 +1,17 @@
 import React, { useCallback } from 'react';
-import { Block } from '../P5';
+import { Block, useP5 } from '../P5';
 import Layer from '../Layer';
 
 export default function Mask({ render, target, debug = false, children }) {
+    const p5 = useP5();
     const onRender = useCallback(
         p => {
             target.onBeforeApply((layer, img) => {
-                console.log('applying mask on layer', target.__id);
+                if (p.width <= 0 || p.height <= 0) return;
+
+                if (p5.debug)
+                    console.log('applying mask on layer', target.__id);
+
                 const maskImage = p.createImage(p.width, p.height);
                 const copyProps = [0, 0, p.width, p.height];
 
@@ -14,7 +19,7 @@ export default function Mask({ render, target, debug = false, children }) {
                 img.mask(maskImage);
             });
         },
-        [target]
+        [p5.debug, target]
     );
 
     return (

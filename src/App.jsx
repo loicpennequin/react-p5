@@ -10,7 +10,7 @@ const constants = {
 
 export default function App() {
     return (
-        <P5 canvasClassName="canvas" frameRate={1} debug>
+        <P5 canvasClassName="canvas">
             <P5.Setup>
                 <Canvas
                     width={constants.CANVAS_WIDTH}
