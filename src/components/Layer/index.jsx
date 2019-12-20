@@ -30,6 +30,7 @@ export default function Layer({
             height = p.height
         }) => {
             if (pg.width <= 0 || pg.height <= 0) return;
+            if (debug) console.log('applying layer', pg.__id)
             const img = p.createImage(width, height);
             const copyProps = [0, 0, width, height];
             img.copy(pg, ...copyProps, ...copyProps);
@@ -46,7 +47,7 @@ export default function Layer({
         };
 
         return pg;
-    }, [blendMode, opacity, id]);
+    }, [blendMode, opacity, id, debug]);
 
     const [layer, setLayer] = useState(createGraphics(p5Instance));
     const beforeApplyCallbacks = useRef([]);

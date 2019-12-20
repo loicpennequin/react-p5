@@ -8,9 +8,9 @@ import Arc from './components/Arc';
 export default function SmileyFace() {
     return (
         <>
-            {/* <Circle x={250} y={250} size={350} noStroke fillColor="#ffe680" /> */}
+            <Circle x={250} y={250} size={350} noStroke fillColor="#ffe680" />
             <Eyes />
-            {/* <Smile /> */}
+            <Smile />
         </>
     );
 }
@@ -67,7 +67,7 @@ function Eyes() {
                 {layer => (
                     <>
                         <Eye layer={layer} initialX={295} />
-                        <Eye layer={layer} initialX={155} />
+                        {/* <Eye layer={layer} initialX={155} /> */}
                     </>
                 )}
             </Layer>
