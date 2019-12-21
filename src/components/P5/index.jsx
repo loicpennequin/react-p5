@@ -173,6 +173,7 @@ function P5Block({ pInstance, onRender, ...props }) {
         const clear = render((p, canvasRef) => {
             let pContext = pInstance ? pInstance : p;
             if (pContext.current) pContext = pContext.current;
+            if (!pContext || Object.keys(pContext).length <= 0) return;
             try {
                 onRender(pContext, canvasRef);
             } catch (err) {

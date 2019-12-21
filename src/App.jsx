@@ -1,6 +1,8 @@
 import React from 'react';
 import P5 from './components/P5';
 import Canvas from './components/Canvas';
+
+import Sky from './Sky';
 import SmileyFace from './SmileyFace';
 
 const constants = {
@@ -18,6 +20,7 @@ export default function App() {
                 />
             </P5.Setup>
             <P5.Draw>
+                <Sky />
                 <SmileyFace />
             </P5.Draw>
         </P5>

@@ -3,7 +3,7 @@ import handleCommonProps from '../../utils/handleCommonProps';
 import log from '../../utils/debugLogger';
 import P5, { useP5 } from '../P5';
 
-export default function Arc({ p, x, y, size, start, stop, ...props }) {
+export default function Arc({ p, x = 0, y = 0, size, start, stop, ...props }) {
     const { debug } = useP5();
     const onRender = useCallback(
         p => {
