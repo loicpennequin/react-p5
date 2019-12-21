@@ -44,14 +44,7 @@ function Eye({ layer, mask, initialX }) {
                 noStroke
                 fillColor="black"
             />
-            <Circle
-                p={mask}
-                x={initialX + 10}
-                y={200}
-                size={75}
-                noStroke
-                fillColor={0}
-            />
+            <Circle p={mask} x={initialX + 10} y={200} size={75} noStroke />
         </>
     );
 }
@@ -60,7 +53,7 @@ function Eyes() {
         <>
             <Layer id="eyes">
                 {layer => (
-                    <Mask target={layer}>
+                    <Mask target={layer} id="eyes mask">
                         {pMask => (
                             <>
                                 <Eye
@@ -107,7 +100,7 @@ function Smile() {
                         noStroke
                         fillColor="#fad"
                     />
-                    <Mask target={layer}>
+                    <Mask target={layer} id="smile mask">
                         {pMask => (
                             <Arc
                                 p={pMask}

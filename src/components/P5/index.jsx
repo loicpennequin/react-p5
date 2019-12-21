@@ -22,7 +22,8 @@ export const useP5 = () => {
 
 function P5({
     frameRate,
-    loop = true,
+    noLoop,
+    clearOnDraw,
     className = '',
     canvasClassName = '',
     children,
@@ -32,44 +33,49 @@ function P5({
     const canvasRef = useRef(null);
     const drawBlocks = useRef([]);
     const setupBlocks = useRef([]);
-    const [p5Instance, setP5Instance] = useState(new p5());
+    const [p5Instance, setP5Instance] = useState(
+        new p5(p => {
+            p.__id = 'dummyCanvas';
+            p.noCanvas();
+            p.setup = () => {};
+        })
+    );
+    const [setupIsDone, setSetupIsDone] = useState(false);
 
     const p5ContextAPI = useMemo(
         () => ({
-            defineDrawBlock(block, index) {
+            defineBlock(typeRef, block, index) {
                 if (index !== undefined) {
-                    drawBlocks.current.splice(index, 0, block);
+                    typeRef.current.splice(index, 0, block);
                 } else {
-                    drawBlocks.current.push(block);
+                    typeRef.current.push(block);
                 }
                 return function clear() {
-                    const idx = drawBlocks.current.findIndex(b => b === block);
-                    drawBlocks.current.splice(idx, 1);
+                    const idx = typeRef.current.findIndex(b => b === block);
+                    typeRef.current.splice(idx, 1);
                     return idx;
                 };
             },
 
-            defineSetupBlock(block, index) {
-                if (index !== undefined) {
-                    setupBlocks.current.splice(index, 0, block);
-                } else {
-                    setupBlocks.current.push(block);
-                }
-                return function clear() {
-                    const idx = setupBlocks.current.findIndex(b => b === block);
-                    setupBlocks.current.splice(idx, 1);
-                    return idx;
-                };
+            setupIsDone,
+
+            defineDrawBlock(...args) {
+                return p5ContextAPI.defineBlock(drawBlocks, ...args);
+            },
+
+            defineSetupBlock(...args) {
+                return p5ContextAPI.defineBlock(setupBlocks, ...args);
             },
 
             p5Instance,
             debug
         }),
-        [debug, p5Instance]
+        [debug, p5Instance, setupIsDone]
     );
 
     const sketchConfig = useMemo(
         () => p => {
+            p.__id = 'root';
             p._createCanvas = p.createCanvas;
             p.createCanvas = (...args) => {
                 const canvas = p._createCanvas(...args);
@@ -77,9 +83,11 @@ function P5({
                 canvas.parent(canvasRef.current);
                 return canvas;
             };
+
             p.setup = () => {
                 if (debug) {
                     console.group('=========SETUP');
+                    console.log('p5 instance id', p.__id);
                     console.log('Setup blocks :', setupBlocks.current.length);
                 }
                 if (frameRate) {
@@ -88,18 +96,23 @@ function P5({
                 setupBlocks.current.forEach(block => {
                     block(p, canvasRef.current);
                 });
-                //p.noLoop();
+
+                setSetupIsDone(true);
+                if (noLoop) {
+                    p.noLoop();
+                }
                 if (debug) {
-                    console.groupEnd()
+                    console.groupEnd();
                 }
             };
 
             p.draw = () => {
                 if (debug) {
                     console.group('=========DRAW');
-                    console.log('Draw blocks :', drawBlocks.current.length)
+                    console.log('p5 instance id', p.__id);
+                    console.log('Draw blocks :', drawBlocks.current.length);
                 }
-                p.clear();
+                if (clearOnDraw) p.clear();
                 drawBlocks.current.forEach(block => {
                     block(p);
                 });
@@ -110,12 +123,13 @@ function P5({
             };
             setP5Instance(p);
         },
-        [canvasClassName, debug, frameRate]
+        [canvasClassName, clearOnDraw, debug, frameRate, noLoop]
     );
 
-    useEffect(() => { 
-        new p5(sketchConfig);   
-    }, [sketchConfig]);
+    useEffect(() => {
+        if (debug) console.log('initializing root canvas');
+        new p5(sketchConfig);
+    }, [debug, sketchConfig]);
 
     return (
         <p5Context.Provider value={p5ContextAPI}>
@@ -138,8 +152,8 @@ function P5BlockList({ children, onRender }) {
 }
 
 function P5Draw({ children }) {
-    const { defineDrawBlock } = useContext(p5Context);
-
+    const { setupIsDone, defineDrawBlock } = useContext(p5Context);
+    if (!setupIsDone) return null;
     return <P5BlockList onRender={defineDrawBlock}>{children}</P5BlockList>;
 }
 export const Draw = memo(P5Draw);
@@ -164,7 +178,6 @@ function P5Block({ pInstance, onRender, ...props }) {
             } catch (err) {
                 console.error(err);
             }
-
         }, blockIndex.current);
         return () => {
             blockIndex.current = clear();
@@ -173,6 +186,7 @@ function P5Block({ pInstance, onRender, ...props }) {
 
     return null;
 }
+
 export const Block = memo(P5Block);
 
 P5.Draw = memo(P5Draw);
