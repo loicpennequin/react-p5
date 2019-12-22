@@ -18,7 +18,7 @@ export default function Square({
             handleCommonProps(props, p);
             if (debug) {
                 log(`drawing gradient on ${p.__id}`, {
-                    canvas: p,
+                    'canvas id': p.__id,
                     x,
                     y,
                     width,

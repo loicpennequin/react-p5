@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import P5 from './components/P5';
 import Canvas from './components/Canvas';
 

@@ -1,25 +1,26 @@
-import React, { useCallback } from 'react';
+import React, { forwardRef, useCallback } from 'react';
 import P5, { useP5 } from '../P5';
 import log from '../../utils/debugLogger';
 import handleCommonProps from '../../utils/handleCommonProps';
+import getBlockConfig from '../../utils/getBlockConfig';
 
-export default function Circle({ p, x = 0, y = 0, size, ...props }) {
+function Circle({ p, x, y, size, ...props }, ref) {
     const { debug } = useP5();
     const onRender = useCallback(
         p => {
+            const config = getBlockConfig({ x, y, size, ...props }, ref);
             handleCommonProps(props, p);
             if (debug) {
                 log(`drawing circle on ${p.__id}`, {
-                    canvas: p,
-                    x,
-                    y,
-                    size,
-                    ...props
+                    'canvas id': p.__id,
+                    ...config
                 });
             }
-            p.circle(x, y, size / 2);
+            p.circle(config.x, config.y, config.size / 2);
         },
-        [props, debug, x, y, size]
+        [x, y, size, props, ref, debug]
     );
     return <P5.Block pInstance={p} onRender={onRender} />;
 }
+
+export default forwardRef(Circle);

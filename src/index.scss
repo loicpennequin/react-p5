@@ -9,6 +9,7 @@ body {
     min-height: 100vh;
     overflow: hidden;
     background: radial-gradient(circle at center, #666, #222);
+    color: white;
 }
 
 #root {
@@ -17,6 +18,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    perspective: 800px;
 }
 
 .canvas {

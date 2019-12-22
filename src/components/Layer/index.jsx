@@ -19,7 +19,8 @@ export default function Layer({
     const createGraphics = useCallback(
         p => {
             let _id = id ? id : uuid();
-            if (debug) logDebug('Create graphics', { parentId: p.__id });
+            if (debug)
+                logDebug('Create graphics', { id: _id, parentId: p.__id });
 
             const pg = p.createGraphics(p.width, p.height);
             pg.__id = _id;
@@ -62,7 +63,6 @@ export default function Layer({
 
     useEffect(() => {
         const pg = createGraphics(p5Instance);
-
         setLayer(layer => {
             // eslint-disable-next-line no-unused-expressions
             layer.remove?.();
@@ -76,7 +76,8 @@ export default function Layer({
     }, [x, y, width, height, layer]);
 
     const clear = useCallback(() => {
-        if (layer?.clear) layer.clear();
+        // eslint-disable-next-line no-unused-expressions
+        layer?.clear?.();
     }, [layer]);
     return (
         <>

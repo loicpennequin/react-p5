@@ -98,9 +98,7 @@ function P5({
                 });
 
                 setSetupIsDone(true);
-                if (noLoop) {
-                    p.noLoop();
-                }
+
                 if (debug) {
                     console.groupEnd();
                 }
@@ -116,6 +114,10 @@ function P5({
                 drawBlocks.current.forEach(block => {
                     block(p);
                 });
+
+                if (noLoop && drawBlocks.current.length > 0) {
+                    p.noLoop();
+                }
 
                 if (debug) {
                     console.groupEnd();
@@ -171,6 +173,7 @@ function P5Block({ pInstance, onRender, ...props }) {
 
     useEffect(() => {
         const clear = render((p, canvasRef) => {
+            // console.log('P5.block, defining block', pInstance);
             let pContext = pInstance ? pInstance : p;
             if (pContext.current) pContext = pContext.current;
             if (!pContext || Object.keys(pContext).length <= 0) return;

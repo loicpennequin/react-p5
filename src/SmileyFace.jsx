@@ -26,6 +26,7 @@ function Eye({ layer, mask, initialX }) {
 
         return clear;
     }, [defineDrawBlock, initialX]);
+
     return (
         <>
             <Circle

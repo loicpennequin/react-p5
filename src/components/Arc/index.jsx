@@ -10,6 +10,7 @@ export default function Arc({ p, x = 0, y = 0, size, start, stop, ...props }) {
             handleCommonProps(props, p);
             if (debug) {
                 log(`drawing arc on ${p.__id}`, {
+                    'canvas id': p.__id,
                     x,
                     y,
                     size,

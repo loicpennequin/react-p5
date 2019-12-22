@@ -10,7 +10,7 @@ export default function Square({ p, x = 0, y = 0, size, ...props }) {
             handleCommonProps(props, p);
             if (debug) {
                 log(`drawing square on ${p.__id}`, {
-                    canvas: p,
+                    'canvas id': p.__id,
                     x,
                     y,
                     size,
