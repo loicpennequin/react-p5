@@ -41,6 +41,7 @@ const DEFAULT_OPTIONS = {
 
 export const P5 = ({ options, children, ...props }) => {
     const [p5Instance, setP5Instance] = useState(null);
+    const __ready = useRef(false);
     const canvasOptions = useMemo(() => ({ ...DEFAULT_OPTIONS, ...options }), [
         options,
     ]);
@@ -50,6 +51,12 @@ export const P5 = ({ options, children, ...props }) => {
     });
 
     useEffect(() => {
+        return () => {
+            if (p5Instance) p5Instance.remove();
+        };
+    }, [p5Instance]);
+
+    useEffect(() => {
         if (!p5Instance) {
             setP5Instance(
                 new p5(p => {
@@ -57,10 +64,20 @@ export const P5 = ({ options, children, ...props }) => {
 
                     p.setup = () => {
                         p.frameRate(canvasOptions.frameRate);
-                        commands.current[SETUP].forEach(command => command());
+                        // Basically I don't understand why I need to do this...
+                        // When Loading the component containing the sketch asynchronously via React.lazy(),
+                        // the setup function is executed before the <Commands /> inside <Setup /> had time to define the commands
+                        // There is probably a better workaround, but this will do for now...
+                        setTimeout(() => {
+                            commands.current[SETUP].forEach(command =>
+                                command()
+                            );
+                            __ready.current = true;
+                        });
                     };
 
                     p.draw = () => {
+                        if (__ready.current !== true) return;
                         if (canvasOptions.clearOnDraw) {
                             p.clear();
                         }
@@ -78,6 +95,7 @@ export const P5 = ({ options, children, ...props }) => {
         getOptions: () => canvasOptions,
         getCommands: () => commands.current,
         defineCommandFactory: key => (command, ctx = p5Instance, idx) => {
+            console.log('defining a command for', key);
             if (typeof idx !== 'number') {
                 idx = commands.current[key].length;
             }

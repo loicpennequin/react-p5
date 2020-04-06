@@ -11,7 +11,6 @@ export function Canvas({
 }) {
     const { rootP5Instance: rp } = useContext(P5RenderContext);
     const canvasContainerRef = useRef(null);
-
     const command = useCallback(() => {
         const canvas = rp.createCanvas(width, height, renderer);
         canvas.parent(canvasContainerRef.current);

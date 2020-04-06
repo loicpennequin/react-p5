@@ -23,9 +23,11 @@ export const RenderContextProvider = ({ step, children }) => {
     );
 };
 
-export const Setup = ({ children }) => (
-    <RenderContextProvider step={SETUP}>{children}</RenderContextProvider>
-);
+export const Setup = ({ children }) => {
+    return (
+        <RenderContextProvider step={SETUP}>{children}</RenderContextProvider>
+    );
+};
 export const Draw = ({ children }) => {
     const { getOptions } = useContext(P5Context);
     return (
