@@ -3,7 +3,10 @@ import { Circle } from 'p5-react';
 
 const generateCircleContraint = (p, radius, position) => {
     const circle = p.createVector(position.x, position.y);
-    const result = p.createVector(p.mouseX, p.mouseY);
+    const result = p.createVector(
+        p.map(p.mouseX, 0, p.width, circle.x - radius, circle.x + radius),
+        p.map(p.mouseY, 0, p.height, circle.y - radius, circle.y + radius)
+    );
     const isInBounds = p.dist(result.x, result.y, circle.x, circle.y) < radius;
 
     if (!isInBounds) {

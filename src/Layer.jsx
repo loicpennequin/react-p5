@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { Command } from './Command';
 import { P5RenderContext } from './RenderContext';
-
+import { handleValueOrFunction } from './utils/handleValueOrFunction';
 const EMPTY_ARRAY = Object.freeze([]);
 
 export function Layer({
@@ -18,6 +18,10 @@ export function Layer({
     filters = EMPTY_ARRAY,
     isStatic = false,
     applyFunction,
+    x = 0,
+    y = 0,
+    width = p => p.width,
+    height = p => p.height,
     id,
 }) {
     const [layerImage, setLayerImage] = useState(null);
@@ -46,7 +50,13 @@ export function Layer({
             if (opacity) {
                 p.tint(255, opacity);
             }
-            p.image(content, 0, 0, p.width, p.height);
+            p.image(
+                content,
+                handleValueOrFunction(p, x),
+                handleValueOrFunction(p, y),
+                handleValueOrFunction(p, width),
+                handleValueOrFunction(p, height)
+            );
         };
 
         if (layerImage && isStatic) {
@@ -56,11 +66,15 @@ export function Layer({
         if (!pg.current || pg.current.width <= 0 || pg.current.height <= 0) {
             return;
         }
+
+        pg.current.mouseX = p.mouseX + handleValueOrFunction(p, x);
+        pg.current.mouseY = p.mouseY + handleValueOrFunction(p, y);
+
         let contentToApply = pg.current;
 
         if (applyCallbacks.current.length > 0) {
-            const copyParams = [0, 0, p.width, p.height];
-            contentToApply = p.createImage(p.width, p.height);
+            const copyParams = [0, 0, pg.current.width, pg.current.height];
+            contentToApply = p.createImage(pg.current.width, pg.current.height);
             contentToApply.copy(pg.current, ...copyParams, ...copyParams);
             applyCallbacks.current.forEach(cb =>
                 cb(pg.current, contentToApply)
@@ -80,6 +94,10 @@ export function Layer({
         applyFunction,
         blendMode,
         opacity,
+        x,
+        y,
+        width,
+        height,
     ]);
 
     const applyFilters = useCallback(() => {
@@ -102,8 +120,8 @@ export function Layer({
         p => {
             if (!pg.current) {
                 pg.current = ctx.rootP5Instance.createGraphics(
-                    ctx.rootP5Instance.width,
-                    ctx.rootP5Instance.height
+                    handleValueOrFunction(ctx.rootP5Instance, width),
+                    handleValueOrFunction(ctx.rootP5Instance, height)
                 );
                 pg.current.on = (event, cb) => {
                     switch (event) {
@@ -123,7 +141,7 @@ export function Layer({
             pg.current.__isLayer = true;
             pg.current.__id = id;
         },
-        [ctx.rootP5Instance, id]
+        [ctx.rootP5Instance, height, id, width]
     );
 
     return (

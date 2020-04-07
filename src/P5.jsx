@@ -69,6 +69,7 @@ export const P5 = ({ options, children, ...props }) => {
                         // the setup function is executed before the <Commands /> inside <Setup /> had time to define the commands
                         // There is probably a better workaround, but this will do for now...
                         setTimeout(() => {
+                            console.log(commands.current[SETUP].length);
                             commands.current[SETUP].forEach(command =>
                                 command()
                             );
@@ -95,7 +96,6 @@ export const P5 = ({ options, children, ...props }) => {
         getOptions: () => canvasOptions,
         getCommands: () => commands.current,
         defineCommandFactory: key => (command, ctx = p5Instance, idx) => {
-            console.log('defining a command for', key);
             if (typeof idx !== 'number') {
                 idx = commands.current[key].length;
             }

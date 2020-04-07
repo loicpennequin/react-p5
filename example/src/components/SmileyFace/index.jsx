@@ -36,23 +36,21 @@ const Eyes = ({ showPupils }) => (
 
 export function SmileyFace() {
     return (
-        <>
+        <Layer>
+            <Circle
+                x={p => p.width / 2}
+                y={p => p.height / 2}
+                size={HEAD_SIZE}
+                fill={[245, 225, 120]}
+                noStroke
+            />
             <Layer>
-                <Circle
-                    x={p => p.width / 2}
-                    y={p => p.height / 2}
-                    size={HEAD_SIZE}
-                    fill={[245, 225, 120]}
-                    noStroke
-                />
-                <Layer>
-                    <Mask>
-                        <Eyes showPupils={false} />
-                    </Mask>
-                    <Eyes showPupils={true} />
-                </Layer>
-                <Smile position={SMILE_POSITION} />
+                <Mask>
+                    <Eyes showPupils={false} />
+                </Mask>
+                <Eyes showPupils={true} />
             </Layer>
-        </>
+            <Smile position={SMILE_POSITION} />
+        </Layer>
     );
 }

@@ -16,7 +16,11 @@ export default function SmileyFacePage() {
 
     return (
         <>
-            <button onClick={toggleDebug}>DEBUG: {debug ? 'ON' : 'OFF'}</button>
+            <div>
+                <button onClick={toggleDebug}>
+                    DEBUG: {debug ? 'ON' : 'OFF'}
+                </button>
+            </div>
             <P5 options={canvasOptions} className="canvas">
                 <Setup>
                     <Canvas width={500} height={500} className="canvas" />

@@ -1,28 +1,33 @@
+import { handleValueOrFunction } from './handleValueOrFunction';
+
 export function handleCommonProps(props, p) {
     const applyProp = propName => {
         if (!props.hasOwnProperty(propName)) return;
-        let params;
+        const value = handleValueOrFunction(p, props[propName]);
 
-        if (typeof props[propName] === 'function') params = props[propName](p);
-        else params = props[propName];
-
-        if (Array.isArray(params)) p[propName](...params);
-        else p[propName](params);
+        if (Array.isArray(value)) p[propName](...value);
+        else p[propName](value);
     };
 
     if (props.noFill) p.noFill();
-    else if (Array.isArray(props.fill)) p.fill(...props.fill);
-    applyProp('fill');
-
     if (props.noStroke) p.noStroke();
-    else if (Array.isArray(props.stroke)) p.stroke(...props.stroke);
+
+    applyProp('ellipseMode');
+    applyProp('rectMode');
+    applyProp('angleMode');
+    applyProp('colorMode');
+
+    applyProp('fill');
     applyProp('stroke');
 
     applyProp('strokeJoin');
     applyProp('strokeCap');
     applyProp('strokeWeight');
 
-    applyProp('ellipseMode');
-    applyProp('rectMode');
-    applyProp('angleMode');
+    applyProp('translate');
+    applyProp('rotate');
+    applyProp('scale');
+    applyProp('shearX');
+    applyProp('shearY');
+    applyProp('applyMatrix');
 }

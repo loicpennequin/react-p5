@@ -1,17 +1,15 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import { Command } from '../Command';
-import { P5RenderContext } from '../RenderContext';
 import { handleCommonProps } from '../utils/handleCommonProps';
 import { handleValueOrFunction } from '../utils/handleValueOrFunction';
 
 export function Point({ p, x, y, children, ...props }) {
-    const { rootP5Instance: rp } = useContext(P5RenderContext);
     const command = useCallback(
         p => {
             handleCommonProps(props, p);
-            p.point(...handleValueOrFunction(rp, x, y));
+            p.point(...handleValueOrFunction(p, x, y));
         },
-        [props, rp, x, y]
+        [props, x, y]
     );
     return (
         <>
