@@ -15,24 +15,38 @@ function App() {
                             <Route
                                 path="/"
                                 exact
-                                component={lazy(() => import('./pages/Home'))}
+                                component={lazy(() =>
+                                    import(
+                                        /* webpackChunkName: "home.page" */ './pages/Home'
+                                    )
+                                )}
                             />
                             <Route
                                 path="/smileyface"
                                 exact
                                 component={lazy(() =>
-                                    import('./pages/SmileyFace')
+                                    import(
+                                        /* webpackChunkName: "smiley.page" */ './pages/SmileyFace'
+                                    )
                                 )}
                             />
                             <Route
                                 path="/layer"
                                 exact
-                                component={lazy(() => import('./pages/Layer'))}
+                                component={lazy(() =>
+                                    import(
+                                        /* webpackChunkName: "layer.page" */ './pages/Layer'
+                                    )
+                                )}
                             />
                             <Route
                                 path="/body"
                                 exact
-                                component={lazy(() => import('./pages/Body'))}
+                                component={lazy(() =>
+                                    import(
+                                        /* webpackChunkName: "body" */ './pages/Body'
+                                    )
+                                )}
                             />
                         </Switch>
                     </Suspense>
