@@ -1,0 +1,1 @@
+{"version":3,"sources":["app.css"],"names":[],"mappings":"AAAA,KACI,eAAgB,CAChB,QACJ,CAEA,EACI,qBACJ,CAEA,eACI,oCACJ","file":"main.99b52ade.chunk.css","sourcesContent":["body {\r\n    background: #eee;\r\n    margin: 0;\r\n}\r\n\r\n* {\r\n    box-sizing: border-box;\r\n}\r\n\r\n.canvas canvas {\r\n    box-shadow: 0 0 1em 0 rgb(0, 0, 0, 0.35);\r\n}\r\n"]}
