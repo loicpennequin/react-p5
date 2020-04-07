@@ -8,7 +8,7 @@ import { theme } from './theme';
 function App() {
     return (
         <ThemeProvider theme={theme}>
-            <Router>
+            <Router basename="/react-p5">
                 <Layout>
                     <Suspense fallback={<div>Loading...</div>}>
                         <Switch>
