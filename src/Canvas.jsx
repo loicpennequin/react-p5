@@ -13,6 +13,7 @@ export function Canvas({
     const canvasContainerRef = useRef(null);
     const command = useCallback(() => {
         const canvas = rp.createCanvas(width, height, renderer);
+        console.log('create canvas');
         canvas.parent(canvasContainerRef.current);
     }, [height, renderer, rp, width]);
 

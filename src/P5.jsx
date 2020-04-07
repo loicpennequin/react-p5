@@ -12,6 +12,7 @@ import { P5RenderContext } from './RenderContext';
 p5.disableFriendlyErrors = true;
 export const SETUP = 'setup';
 export const DRAW = 'draw';
+export const PRELOAD = 'preload';
 
 export const P5Context = createContext(null);
 
@@ -48,6 +49,7 @@ export const P5 = ({ options, children, ...props }) => {
     const commands = useRef({
         [SETUP]: [],
         [DRAW]: [],
+        [PRELOAD]: [],
     });
 
     useEffect(() => {

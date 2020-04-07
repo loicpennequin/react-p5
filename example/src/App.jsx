@@ -1,31 +1,15 @@
-import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom';
 import './app.css';
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Layout } from './components/Layout';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { theme } from './theme';
 
 function App() {
     return (
-        <Router>
-            <div className="layout">
-                <header className="header">
-                    <h1>P5-React Examples</h1>
-                </header>
-                <nav className="navigation">
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/smileyface">Smiley Face</Link>
-                        </li>
-                        <li>
-                            <Link to="/layer">Layer</Link>
-                        </li>
-                        <li>
-                            <Link to="/body">Body</Link>
-                        </li>
-                    </ul>
-                </nav>
-                <main className="view">
+        <ThemeProvider theme={theme}>
+            <Router>
+                <Layout>
                     <Suspense fallback={<div>Loading...</div>}>
                         <Switch>
                             <Route
@@ -52,9 +36,9 @@ function App() {
                             />
                         </Switch>
                     </Suspense>
-                </main>
-            </div>
-        </Router>
+                </Layout>
+            </Router>
+        </ThemeProvider>
     );
 }
 

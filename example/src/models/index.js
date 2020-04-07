@@ -6,9 +6,12 @@ export class BouncingObject {
         this.gravity = p.createVector(0, 1.5);
     }
 
-    update(p) {
+    applyForce() {
         this.vel.add(this.gravity);
         this.position.add(this.vel);
+    }
+
+    update(p) {
         if (this.position.y > p.height) {
             this.position.y = p.height;
             this.vel = this.vel.mult(-1);

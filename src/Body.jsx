@@ -18,8 +18,17 @@ export function Body({ model, children }) {
     );
 
     useEffect(() => {
-        _model.current = model(p, _model.current);
-        setObjectState({ state: _model.current });
+        // We need to wait for the next tick before initializing the model
+        // This is because it could happend that setup commands such as createCanvas have not been run yet, potentially forwarding wrong values into the model
+        if (!_model.current) {
+            setTimeout(() => {
+                _model.current = model(p, _model.current);
+                setObjectState({ state: _model.current });
+            });
+        } else {
+            _model.current = model(p, _model.current);
+            setObjectState({ state: _model.current });
+        }
     }, [model, p]);
 
     return (
