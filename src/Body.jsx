@@ -24,7 +24,7 @@ export function Body({ model, children }) {
             setTimeout(() => {
                 _model.current = model(p, _model.current);
                 setObjectState({ state: _model.current });
-            });
+            }, 25);
         } else {
             _model.current = model(p, _model.current);
             setObjectState({ state: _model.current });

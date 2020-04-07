@@ -1,9 +1,14 @@
 import React, { useState, useCallback } from 'react';
-import { Canvas, Setup, Draw } from 'p5-react';
 import { Body } from '../components/Body';
 import { BouncingObject, RandomPathObject } from '../models';
 import { SketchWrapper } from '../components/SketchWrapper';
-
+import {
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+    FormControl,
+    FormLabel,
+} from '@material-ui/core';
 export default function SmileyFacePage() {
     const bouncing = useCallback(
         (p, o) => new BouncingObject(p, o && o.position),
@@ -14,34 +19,32 @@ export default function SmileyFacePage() {
         []
     );
 
-    const [model, setModel] = useState(() => bouncing);
+    const models = {
+        bouncing,
+        random,
+    };
 
+    const [model, setModel] = useState('bouncing');
+    const handleChange = e => {
+        setModel(e.target.value);
+    };
     return (
-        <SketchWrapper>
-            <div>
-                <input
-                    type="radio"
-                    id="bouncing"
-                    checked={model === bouncing}
-                    onChange={() => setModel(() => bouncing)}
-                />
-                <label htmlFor="bouncing">Bouncing ball</label>
-            </div>
-            <div style={{ marginBottom: '.5em' }}>
-                <input
-                    type="radio"
-                    id="random"
-                    checked={model === random}
-                    onChange={() => setModel(() => random)}
-                />
-                <label htmlFor="random">Ball moving randomly</label>
-            </div>
-            <Setup>
-                <Canvas width={500} height={500} className="canvas" />
-            </Setup>
-            <Draw>
-                <Body model={model} />
-            </Draw>
+        <SketchWrapper draw={<Body model={models[model]} />}>
+            <FormControl component="fieldset">
+                <FormLabel component="legend">Model</FormLabel>
+                <RadioGroup name="model" value={model} onChange={handleChange}>
+                    <FormControlLabel
+                        value="bouncing"
+                        control={<Radio />}
+                        label="Bouncing ball"
+                    />
+                    <FormControlLabel
+                        value="random"
+                        control={<Radio />}
+                        label="Ball moving randomly"
+                    />
+                </RadioGroup>
+            </FormControl>
         </SketchWrapper>
     );
 }

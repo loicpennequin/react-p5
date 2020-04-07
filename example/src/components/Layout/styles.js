@@ -16,6 +16,7 @@ export const useStyles = makeStyles(theme => {
         },
         list: {
             color: theme.palette.primary.main,
+            backgroundColor: theme.palette.background.paper,
         },
         subList: {
             paddingLeft: theme.spacing(2),

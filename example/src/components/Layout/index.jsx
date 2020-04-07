@@ -10,6 +10,7 @@ import {
     Toolbar,
     Box,
     Link,
+    Container,
 } from '@material-ui/core';
 
 import { ExpandLess, ExpandMore, GitHub } from '@material-ui/icons';
@@ -53,6 +54,9 @@ export function Layout({ children }) {
                         <ListItem button component={RouterLink} to="/layer">
                             <ListItemText primary="Layer" />
                         </ListItem>
+                        <ListItem button component={RouterLink} to="/body">
+                            <ListItemText primary="Body" />
+                        </ListItem>
                     </List>
                 </Collapse>
 
@@ -69,13 +73,10 @@ export function Layout({ children }) {
                         >
                             <ListItemText primary="Smiley Face" />
                         </ListItem>
-                        <ListItem button component={RouterLink} to="/body">
-                            <ListItemText primary="Body" />
-                        </ListItem>
                     </List>
                 </Collapse>
             </List>
-            <main className="view">{children}</main>
+            <Container component="main">{children}</Container>
         </div>
     );
 }

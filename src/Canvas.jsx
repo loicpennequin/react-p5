@@ -7,15 +7,18 @@ export function Canvas({
     height,
     renderer = 'P2D',
     children,
+    canvasClassName,
+    canvasStyle,
     ...props
 }) {
     const { rootP5Instance: rp } = useContext(P5RenderContext);
     const canvasContainerRef = useRef(null);
     const command = useCallback(() => {
         const canvas = rp.createCanvas(width, height, renderer);
-        console.log('create canvas');
+        canvas.elt.className = canvasClassName;
+        canvas.elt.style = canvasStyle;
         canvas.parent(canvasContainerRef.current);
-    }, [height, renderer, rp, width]);
+    }, [canvasClassName, canvasStyle, height, renderer, rp, width]);
 
     return (
         <>

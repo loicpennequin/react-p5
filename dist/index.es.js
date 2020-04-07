@@ -610,7 +610,9 @@ function Canvas(_ref) {
       _ref$renderer = _ref.renderer,
       renderer = _ref$renderer === void 0 ? 'P2D' : _ref$renderer,
       children = _ref.children,
-      props = _objectWithoutProperties(_ref, ["width", "height", "renderer", "children"]);
+      canvasClassName = _ref.canvasClassName,
+      canvasStyle = _ref.canvasStyle,
+      props = _objectWithoutProperties(_ref, ["width", "height", "renderer", "children", "canvasClassName", "canvasStyle"]);
 
   var _useContext = useContext(P5RenderContext),
       rp = _useContext.rootP5Instance;
@@ -618,9 +620,10 @@ function Canvas(_ref) {
   var canvasContainerRef = useRef(null);
   var command = useCallback(function () {
     var canvas = rp.createCanvas(width, height, renderer);
-    console.log('create canvas');
+    canvas.elt.className = canvasClassName;
+    canvas.elt.style = canvasStyle;
     canvas.parent(canvasContainerRef.current);
-  }, [height, renderer, rp, width]);
+  }, [canvasClassName, canvasStyle, height, renderer, rp, width]);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", _extends({
     ref: canvasContainerRef
   }, props)), /*#__PURE__*/React.createElement(Command, {
@@ -784,7 +787,7 @@ function Body(_ref) {
         setObjectState({
           state: _model.current
         });
-      });
+      }, 25);
     } else {
       _model.current = model(p, _model.current);
       setObjectState({
