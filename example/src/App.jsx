@@ -20,6 +20,9 @@ function App() {
                         <li>
                             <Link to="/layer">Layer</Link>
                         </li>
+                        <li>
+                            <Link to="/body">Body</Link>
+                        </li>
                     </ul>
                 </nav>
                 <main className="view">
@@ -41,6 +44,11 @@ function App() {
                                 path="/layer"
                                 exact
                                 component={lazy(() => import('./pages/Layer'))}
+                            />
+                            <Route
+                                path="/body"
+                                exact
+                                component={lazy(() => import('./pages/Body'))}
                             />
                         </Switch>
                     </Suspense>

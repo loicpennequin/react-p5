@@ -7,6 +7,7 @@ import React, {
     useContext,
 } from 'react';
 import p5 from 'p5';
+import { P5RenderContext } from './RenderContext';
 
 p5.disableFriendlyErrors = true;
 export const SETUP = 'setup';
@@ -16,7 +17,6 @@ export const P5Context = createContext(null);
 
 export const useP5 = () => {
     const context = useContext(P5RenderContext);
-
     return {
         p: context.p5Instance,
         root: context.rootP5Instance,
@@ -69,7 +69,6 @@ export const P5 = ({ options, children, ...props }) => {
                         // the setup function is executed before the <Commands /> inside <Setup /> had time to define the commands
                         // There is probably a better workaround, but this will do for now...
                         setTimeout(() => {
-                            console.log(commands.current[SETUP].length);
                             commands.current[SETUP].forEach(command =>
                                 command()
                             );

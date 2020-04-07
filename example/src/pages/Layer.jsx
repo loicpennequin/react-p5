@@ -1,11 +1,49 @@
-import React, { useState, useMemo } from 'react';
-import { P5, Canvas, Setup, Draw, Background, Circle, Layer } from 'p5-react';
+import React, { useState, useRef, useMemo } from 'react';
+import {
+    P5,
+    Canvas,
+    Setup,
+    Draw,
+    Background,
+    Circle,
+    Layer,
+    Line,
+    useDraw,
+} from 'p5-react';
 
-export default function SmileyFacePage() {
+const SketchDraw = () => {
+    const lineY = useRef(0);
+    useDraw(p => {
+        lineY.current++;
+        if (lineY.current > p.height) lineY.current = 0;
+    });
+
+    return (
+        <>
+            <Background color={0} />
+            <Line
+                from={p => [0, lineY.current]}
+                to={p => [p.width, lineY.current]}
+                stroke={[255, 0, 0]}
+                strokeWeight={2}
+            />
+            <Layer id="layer" autoClear={false}>
+                <Circle
+                    x={p => p.mouseX}
+                    y={p => p.mouseY}
+                    size={20}
+                    fill={255}
+                    noStroke
+                />
+            </Layer>
+        </>
+    );
+};
+export default function LayerPage() {
     const [debug, setDebug] = useState(false);
     const canvasOptions = useMemo(
         () => ({
-            clearOnDraw: false,
+            clearOnDraw: true,
             debug,
             // frameRate: 1,
         }),
@@ -26,16 +64,7 @@ export default function SmileyFacePage() {
                     <Background color={0} />
                 </Setup>
                 <Draw>
-                    <Background color={0} />
-                    <Layer id="layer" autoClear={false}>
-                        <Circle
-                            x={p => p.mouseX}
-                            y={p => p.mouseY}
-                            size={100}
-                            fill={255}
-                            noStroke
-                        />
-                    </Layer>
+                    <SketchDraw />
                 </Draw>
             </P5>
         </>

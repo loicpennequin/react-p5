@@ -7,6 +7,7 @@ export { PushPop } from './PushPop';
 export { Canvas } from './Canvas';
 export { Debug } from './Debug';
 export { LinearGradient } from './LinearGradient';
+export { Body } from './Body';
 
 export { Arc } from './shapes/Arc';
 export { Background } from './shapes/Background';
