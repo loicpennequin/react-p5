@@ -1,2 +1,0 @@
-(this["webpackJsonpp5-react-example"]=this["webpackJsonpp5-react-example"]||[]).push([[7],{99:function(e,t,n){"use strict";n.r(t),n.d(t,"default",(function(){return c}));var a=n(0),r=n.n(a);function c(){return r.a.createElement("h1",null,"The Home Page.")}}}]);
-//# sourceMappingURL=7.2d511756.chunk.js.map
