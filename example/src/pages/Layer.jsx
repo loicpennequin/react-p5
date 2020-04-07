@@ -11,6 +11,7 @@ export default function LayerPage() {
 
     return (
         <SketchWrapper
+            title="Layer"
             setup={<Background color={0} />}
             draw={
                 <>

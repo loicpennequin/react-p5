@@ -28,7 +28,9 @@ export function Layout({ children }) {
         <div className={classes.root}>
             <AppBar position="static" className={classes.header}>
                 <Toolbar>
-                    <Typography variant="h2">P5-React</Typography>
+                    <Typography variant="h3" component="h1">
+                        P5-React
+                    </Typography>
                     <Box ml="auto">
                         <Link href="https://github.com/loicpennequin/react-p5">
                             <GitHub

@@ -29,7 +29,7 @@ export default function SmileyFacePage() {
         setModel(e.target.value);
     };
     return (
-        <SketchWrapper draw={<Body model={models[model]} />}>
+        <SketchWrapper title="Body" draw={<Body model={models[model]} />}>
             <FormControl component="fieldset">
                 <FormLabel component="legend">Model</FormLabel>
                 <RadioGroup name="model" value={model} onChange={handleChange}>

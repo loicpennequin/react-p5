@@ -6,6 +6,7 @@ import { SketchWrapper } from '../components/SketchWrapper';
 export default function SmileyFacePage() {
     return (
         <SketchWrapper
+            title="SmileyFace"
             draw={
                 <>
                     <LinearGradient

@@ -7,7 +7,7 @@ export const theme = createMuiTheme({
         },
         contrastThreshold: 3,
 
-        tonalOffset: 0.2,
+        tonalOffset: 0.4,
         background: {
             default: '#f5f5f5',
         },
