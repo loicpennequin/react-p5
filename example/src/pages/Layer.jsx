@@ -2,6 +2,8 @@ import React, { useRef, useCallback } from 'react';
 import { Background, Circle, Layer, Line, Command } from 'p5-react';
 import { SketchWrapper } from '../components/SketchWrapper';
 
+const description = `
+`;
 export default function LayerPage() {
     const lineY = useRef(0);
     const updateLinePosition = useCallback(p => {
@@ -12,6 +14,8 @@ export default function LayerPage() {
     return (
         <SketchWrapper
             title="Layer"
+            githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/Layer.jsx"
+            description={description}
             setup={<Background color={0} />}
             draw={
                 <>

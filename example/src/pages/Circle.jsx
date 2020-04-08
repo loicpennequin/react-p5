@@ -4,19 +4,13 @@ import { SketchWrapper } from '../components/SketchWrapper';
 import { Circle } from 'p5-react';
 import { useTheme } from '@material-ui/core/styles';
 
-const description = `
-The \`<Circle>\` component allows you to draw a circle on the screen. 
-
-It is the equivalent of calling \`p5.circle()\`;
-`;
-
 export default function CirclePage() {
     const theme = useTheme();
 
     return (
         <SketchWrapper
-            title="Body"
-            description={description}
+            description={Circle.toMarkdown()}
+            githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/shapes/Circle.jsx"
             draw={
                 <>
                     <Circle

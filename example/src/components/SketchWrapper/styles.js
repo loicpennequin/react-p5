@@ -4,14 +4,24 @@ export const useStyles = makeStyles(theme => {
     return {
         canvas: {
             display: 'block',
-            boxShadow: theme.shadows[3],
+            boxShadow: theme.shadows[4],
             margin: `${theme.spacing(2)}px 0`,
         },
-        title: {
-            borderBottom: `solid 3px ${theme.palette.primary.light}`,
+        description: {
+            '& p[data-description]': {
+                fontSize: '1.15em',
+            },
+            '& h2': {
+                fontWeight: theme.typography.h3.fontWeight,
+
+                '&:first-of-type': {
+                    ...theme.typography.h3,
+                    borderBottom: `solid 3px ${theme.palette.primary.light}`,
+                },
+            },
         },
-        preview: {
-            width: '40%',
+        panel: {
+            flex: 1,
         },
     };
 });

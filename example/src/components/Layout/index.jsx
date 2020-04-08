@@ -4,6 +4,7 @@ import {
     List,
     ListItem,
     ListItemText,
+    ListItemIcon,
     Collapse,
     AppBar,
     Typography,
@@ -12,7 +13,7 @@ import {
     Link,
     Container,
 } from '@material-ui/core';
-import { ExpandLess, ExpandMore, GitHub } from '@material-ui/icons';
+import { ExpandLess, ExpandMore, GitHub, Whatshot } from '@material-ui/icons';
 import routes from '../../routes';
 
 import { useStyles } from './styles';
@@ -28,7 +29,13 @@ function RouteList({ routes, prefix = '' }) {
             component={RouterLink}
             to={`${prefix}${route.path}`}
         >
-            <ListItemText primary={route.name} />
+            <ListItemText
+                primary={
+                    <>
+                        {route.name} {route.hot && <Whatshot />}
+                    </>
+                }
+            />
         </ListItem>
     ));
 }

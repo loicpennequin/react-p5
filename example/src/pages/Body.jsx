@@ -12,7 +12,9 @@ import { Circle, Body } from 'p5-react';
 import { useTheme } from '@material-ui/core/styles';
 
 const description = `
-The \`<Body>\` component allows you to easily render models.
+The \`<Body>\` component allows you to easily render moving object, 
+by providing a constructor function via the \`model\` prop that contains an \`update()\` method. 
+The update method will be called on every \`draw\` cycle by the P5 Instance.
 `;
 
 export default function BodyPage() {
@@ -20,8 +22,10 @@ export default function BodyPage() {
     const [model, setModel] = useState('bouncing');
     const models = useMemo(
         () => ({
-            bouncing: (p, o) => new BouncingObject(p, o && o.position),
-            random: (p, o) => new RandomPathObject(p, o && o.position),
+            bouncing: (p, currentModel) =>
+                new BouncingObject(p, currentModel && currentModel.position),
+            random: (p, currentModel) =>
+                new RandomPathObject(p, currentModel && currentModel.position),
         }),
         []
     );
@@ -33,6 +37,7 @@ export default function BodyPage() {
         <SketchWrapper
             title="Body"
             description={description}
+            githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/Body.jsx"
             draw={
                 <Body model={models[model]}>
                     {({ position }) => (

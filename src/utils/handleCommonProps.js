@@ -1,4 +1,5 @@
 import { handleValueOrFunction } from './handleValueOrFunction';
+import { PropTypes } from 'react-desc';
 
 export function handleCommonProps(props, p) {
     const applyProp = propName => {
@@ -31,3 +32,59 @@ export function handleCommonProps(props, p) {
     applyProp('shearY');
     applyProp('applyMatrix');
 }
+
+const generate = (name, ...propTypes) => ({
+    [name]: PropTypes.oneOfType([PropTypes.func, ...propTypes]).description(
+        `See [${name}](https://p5js.org/reference/#/p5/${name})`
+    ),
+});
+export const commonPropTypes = Object.assign(
+    {},
+    generate(
+        'ellipseMode',
+        PropTypes.oneOf(['center', 'radius', 'corner', 'corners'])
+    ),
+    generate(
+        'rectMode',
+        PropTypes.oneOf(['center', 'radius', 'corner', 'corners'])
+    ),
+    generate('angleMode', PropTypes.oneOf(['degrees', 'radians'])),
+    generate(
+        'colorMode',
+        PropTypes.array,
+        PropTypes.oneOf(['rgb', 'hsb', 'hsl'])
+    ),
+    generate(
+        'fill',
+        PropTypes.oneOfType([
+            PropTypes.array,
+            PropTypes.number,
+            PropTypes.string,
+        ])
+    ),
+    generate(
+        'stroke',
+        PropTypes.oneOfType([
+            PropTypes.array,
+            PropTypes.number,
+            PropTypes.string,
+        ])
+    ),
+    {
+        noFill: PropTypes.bool.description(
+            `See [noFill](https://p5js.org/reference/#/p5/noFill)`
+        ),
+        noStroke: PropTypes.bool.description(
+            `See [noStroke](https://p5js.org/reference/#/p5/noStroke)`
+        ),
+    },
+    generate('strokeJoin', PropTypes.oneOf(['miter', 'bevel', 'round'])),
+    generate('strokeJoin', PropTypes.oneOf(['round', 'square', 'project'])),
+    generate('strokeWeight', PropTypes.number),
+    generate('translate', PropTypes.array),
+    generate('rotate', PropTypes.number, PropTypes.array),
+    generate('scale', PropTypes.number, PropTypes.array),
+    generate('shearX', PropTypes.number),
+    generate('shearY', PropTypes.number),
+    generate('applyMatrix', PropTypes.array)
+);

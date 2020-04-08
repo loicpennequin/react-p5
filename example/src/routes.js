@@ -22,11 +22,13 @@ const routes = {
             name: 'Body',
             label: 'Body',
             path: '/body',
+            hot: true,
         },
         {
             name: 'Layer',
             label: 'Layer',
             path: '/layer',
+            hot: true,
         },
         {
             name: 'Circle',
