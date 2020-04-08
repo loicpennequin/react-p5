@@ -8,6 +8,12 @@ export const useStyles = makeStyles(theme => {
             margin: `${theme.spacing(2)}px 0`,
         },
         description: {
+            '& strong': {
+                color: theme.palette.primary.light,
+                borderTop: `solid 1px ${theme.palette.divider}`,
+                display: 'block',
+                paddingTop: theme.spacing(1),
+            },
             '& p[data-description]': {
                 fontSize: '1.15em',
             },
@@ -16,8 +22,12 @@ export const useStyles = makeStyles(theme => {
 
                 '&:first-of-type': {
                     ...theme.typography.h3,
-                    borderBottom: `solid 3px ${theme.palette.primary.light}`,
+                    borderBottom: `solid 3px ${theme.palette.primary}`,
                 },
+            },
+            '& code': {
+                backgroundColor: theme.palette.background.default,
+                color: theme.palette.primary.dark,
             },
         },
         panel: {

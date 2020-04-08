@@ -43,7 +43,7 @@ Canvas.propTypes = {
     height: PropTypes.oneOfType([PropTypes.func, PropTypes.number]).description(
         'The width of the canvas in pixels'
     ).isRequired,
-    renderer: PropTypes.oneOf('P2D', 'WEBGL').description(
+    renderer: PropTypes.oneOf(['P2D', 'WEBGL']).description(
         'The renderer to be used for the canvas. Defaults to P2D'
     ),
     canvasClassName: PropTypes.string.description(

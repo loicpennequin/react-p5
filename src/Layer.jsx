@@ -180,11 +180,11 @@ Layer.propTypes = {
     id: PropTypes.string.description('todo'),
     x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'The x-coordinate of the shape'
-    ).isRequired,
+    ),
     y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'The y-coordinate of the shape'
-    ).isRequired,
+    ),
     size: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'The size of the shape in pixels'
-    ).isRequired,
+    ),
 };

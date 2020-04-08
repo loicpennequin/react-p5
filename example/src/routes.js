@@ -25,15 +25,35 @@ const routes = {
             hot: true,
         },
         {
+            name: 'Circle',
+            label: 'Circle',
+            path: '/circle',
+        },
+        {
+            name: 'Ellipse',
+            label: 'Ellipse',
+            path: '/ellipse',
+        },
+        {
             name: 'Layer',
             label: 'Layer',
             path: '/layer',
             hot: true,
         },
         {
-            name: 'Circle',
-            label: 'Circle',
-            path: '/circle',
+            name: 'Line',
+            label: 'Line',
+            path: '/line',
+        },
+        {
+            name: 'Rectangle',
+            label: 'Rectangle',
+            path: '/rectangle',
+        },
+        {
+            name: 'Square',
+            label: 'Square',
+            path: '/square',
         },
     ],
     other: [

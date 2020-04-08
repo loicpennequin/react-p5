@@ -136,7 +136,11 @@ LinearGradient.propTypes = {
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'The width of the shape in pixels'
     ).isRequired,
-    colors: PropTypes.oneOfType([PropTypes.func, PropTypes.array]),
-    angle: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
+    colors: PropTypes.oneOfType([PropTypes.func, PropTypes.array]).description(
+        'todo'
+    ),
+    angle: PropTypes.oneOfType([PropTypes.func, PropTypes.number]).description(
+        'todo'
+    ),
     ...commonPropTypes,
 };

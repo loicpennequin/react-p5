@@ -2064,7 +2064,6 @@ var P5 = function P5(_ref) {
     if (!p5Instance) {
       setP5Instance(new p5(function (p) {
         p.__id = 'ROOT';
-        console.log(p.MITER, p.BEVEL, p.ROUND);
 
         p.setup = function () {
           p.pixelDensity(canvasOptions.pixelDensity);
@@ -2171,7 +2170,7 @@ var Canvas = lib_2(CanvasComponent).description("The `<Canvas>` component will c
 Canvas.propTypes = {
   width: lib_1.oneOfType([lib_1.func, lib_1.number]).description('The width of the canvas in pixels').isRequired,
   height: lib_1.oneOfType([lib_1.func, lib_1.number]).description('The width of the canvas in pixels').isRequired,
-  renderer: lib_1.oneOf('P2D', 'WEBGL').description('The renderer to be used for the canvas. Defaults to P2D'),
+  renderer: lib_1.oneOf(['P2D', 'WEBGL']).description('The renderer to be used for the canvas. Defaults to P2D'),
   canvasClassName: lib_1.string.description('The classname passed to created the canvas DOM element'),
   canvasStyle: lib_1.object.description('The stylepassed to the createdcanvas DOM element')
 };
@@ -2356,9 +2355,9 @@ Layer.propTypes = {
   isStatic: lib_1.bool.description('todo'),
   applyFunction: lib_1.func.description('todo'),
   id: lib_1.string.description('todo'),
-  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
-  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
-  size: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The size of the shape in pixels').isRequired
+  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape'),
+  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape'),
+  size: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The size of the shape in pixels')
 };
 
 function MaskComponent(_ref) {
@@ -2436,7 +2435,7 @@ var commonPropTypes = Object.assign({}, generate('ellipseMode', lib_1.oneOf(['ce
   noStroke: lib_1.bool.description("See [noStroke](https://p5js.org/reference/#/p5/noStroke)")
 }, generate('strokeJoin', lib_1.oneOf(['miter', 'bevel', 'round'])), generate('strokeJoin', lib_1.oneOf(['round', 'square', 'project'])), generate('strokeWeight', lib_1.number), generate('translate', lib_1.array), generate('rotate', lib_1.number, lib_1.array), generate('scale', lib_1.number, lib_1.array), generate('shearX', lib_1.number), generate('shearY', lib_1.number), generate('applyMatrix', lib_1.array));
 
-function PushPop(_ref) {
+function PushPopComponent(_ref) {
   var children = _ref.children,
       props = _objectWithoutProperties(_ref, ["children"]);
 
@@ -2453,6 +2452,10 @@ function PushPop(_ref) {
     command: pop
   }));
 }
+
+PushPopComponent.displayName = 'PushPop';
+var PushPop = lib_2(PushPopComponent).description('Todo');
+PushPop.propTypes = commonPropTypes;
 
 function RectangleComponent(_ref) {
   var x = _ref.x,
@@ -2593,8 +2596,8 @@ LinearGradient.propTypes = _objectSpread2({
   y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
   width: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired,
   height: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired,
-  colors: lib_1.oneOfType([lib_1.func, lib_1.array]),
-  angle: lib_1.oneOfType([lib_1.func, lib_1.number])
+  colors: lib_1.oneOfType([lib_1.func, lib_1.array]).description('todo'),
+  angle: lib_1.oneOfType([lib_1.func, lib_1.number]).description('todo')
 }, commonPropTypes);
 
 function BodyComponent(_ref) {

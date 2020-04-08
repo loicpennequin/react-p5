@@ -64,7 +64,7 @@ export const P5 = ({ options, children, ...props }) => {
             setP5Instance(
                 new p5(p => {
                     p.__id = 'ROOT';
-                    console.log(p.MITER, p.BEVEL, p.ROUND);
+
                     p.setup = () => {
                         p.pixelDensity(canvasOptions.pixelDensity);
                         p.frameRate(canvasOptions.frameRate);
