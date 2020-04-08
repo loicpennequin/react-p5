@@ -1,42 +1,55 @@
 import { lazy } from 'react';
 
-const Home = lazy(() =>
-    import(/* webpackChunkName: "home.page" */ './pages/Home')
-);
+const generateLazyComponent = route => {
+    return {
+        ...route,
+        component: lazy(() =>
+            import(/* webpackChunkName: "[request]" */ `./pages/${route.name}`)
+        ),
+    };
+};
 
-const SmileyFace = lazy(() =>
-    import(/* webpackChunkName: "smiley.page" */ './pages/SmileyFace')
-);
-const Layer = lazy(() =>
-    import(/* webpackChunkName: "layer.page" */ './pages/Layer')
-);
-const Body = lazy(() => import(/* webpackChunkName: "body" */ './pages/Body'));
-
-export default {
+const routes = {
     examples: [
         {
-            name: 'Smiley Face',
+            name: 'SmileyFace',
+            label: 'Smiley Face',
             path: '/smiley-face',
-            component: SmileyFace,
         },
     ],
     components: [
         {
             name: 'Body',
+            label: 'Body',
             path: '/body',
-            component: Body,
         },
         {
             name: 'Layer',
+            label: 'Layer',
             path: '/layer',
-            component: Layer,
+        },
+        {
+            name: 'Circle',
+            label: 'Circle',
+            path: '/circle',
         },
     ],
     other: [
         {
             name: 'Home',
+            label: 'Home',
             path: '/',
-            component: Home,
+        },
+        {
+            name: 'GettingStarted',
+            label: 'Getting Started',
+            path: '/',
         },
     ],
+};
+
+export default {
+    examples: routes.examples.map(generateLazyComponent),
+    components: routes.components.map(generateLazyComponent),
+    other: routes.other.map(generateLazyComponent),
 };

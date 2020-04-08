@@ -17,8 +17,23 @@ import routes from '../../routes';
 
 import { useStyles } from './styles';
 
-export function Layout({ children }) {
+function RouteList({ routes, prefix = '' }) {
     const { pathname } = useLocation();
+
+    return routes.map(route => (
+        <ListItem
+            button
+            key={route.name}
+            selected={pathname === `${route.path}`}
+            component={RouterLink}
+            to={`${prefix}${route.path}`}
+        >
+            <ListItemText primary={route.name} />
+        </ListItem>
+    ));
+}
+
+export function Layout({ children }) {
     const [componentsOpen, setComponentsOpen] = useState(false);
     const [exemplesOpen, setExemplesOpen] = useState(false);
 
@@ -31,7 +46,9 @@ export function Layout({ children }) {
             <AppBar position="static" className={classes.header}>
                 <Toolbar>
                     <Typography variant="h3" component="h1">
-                        P5-React
+                        <RouterLink to="/" className={classes.headerTitle}>
+                            P5-React
+                        </RouterLink>
                     </Typography>
                     <Box ml="auto">
                         <Link href="https://github.com/loicpennequin/react-p5">
@@ -45,37 +62,19 @@ export function Layout({ children }) {
             </AppBar>
 
             <List component="nav" className={classes.list}>
-                {routes.other.map(route => (
-                    <ListItem
-                        button
-                        key={route.name}
-                        selected={pathname === `${route.path}`}
-                        component={RouterLink}
-                        to={`${route.path}`}
-                    >
-                        <ListItemText primary={route.name} />
-                    </ListItem>
-                ))}
+                <RouteList routes={routes.other} />
 
                 <ListItem button onClick={toggleComponents}>
                     <ListItemText primary="Components" />
                     {componentsOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
+
                 <Collapse in={componentsOpen} timeout="auto" unmountOnExit>
                     <List component="div" className={classes.subList}>
-                        {routes.components.map(route => (
-                            <ListItem
-                                button
-                                key={route.name}
-                                selected={
-                                    pathname === `/components${route.path}`
-                                }
-                                component={RouterLink}
-                                to={`/components${route.path}`}
-                            >
-                                <ListItemText primary={route.name} />
-                            </ListItem>
-                        ))}
+                        <RouteList
+                            routes={routes.components}
+                            prefix="/components"
+                        />
                     </List>
                 </Collapse>
 
@@ -83,23 +82,19 @@ export function Layout({ children }) {
                     <ListItemText primary="Exemples" />
                     {exemplesOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
+
                 <Collapse in={exemplesOpen} timeout="auto" unmountOnExit>
                     <List component="div" className={classes.subList}>
-                        {routes.examples.map(route => (
-                            <ListItem
-                                button
-                                key={route.name}
-                                selected={pathname === `/examples${route.path}`}
-                                component={RouterLink}
-                                to={`/examples${route.path}`}
-                            >
-                                <ListItemText primary={route.name} />
-                            </ListItem>
-                        ))}
+                        <RouteList
+                            routes={routes.examples}
+                            prefix="/examples"
+                        />
                     </List>
                 </Collapse>
             </List>
-            <Container component="main">{children}</Container>
+            <Container component={Box} mt={3}>
+                {children}
+            </Container>
         </div>
     );
 }

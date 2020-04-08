@@ -1,6 +1,6 @@
 import React from 'react';
 import { LinearGradient } from 'p5-react';
-import { SmileyFace } from '../components/SmileyFace';
+import { SmileyFace } from '../components/Sketches/SmileyFace';
 import { SketchWrapper } from '../components/SketchWrapper';
 
 export default function SmileyFacePage() {

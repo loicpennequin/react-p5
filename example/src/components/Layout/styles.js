@@ -12,6 +12,10 @@ export const useStyles = makeStyles(theme => {
         header: {
             gridColumn: 'span 2',
         },
+        headerTitle: {
+            color: 'inherit',
+            textDecoration: 'none',
+        },
         headerLinks: {
             marginLeft: 'auto',
         },

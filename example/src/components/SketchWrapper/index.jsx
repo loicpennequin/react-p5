@@ -1,6 +1,11 @@
-import React, { useContext } from 'react';
+import 'prismjs/themes/prism-tomorrow.css';
+import React, { useContext, useState, useMemo } from 'react';
+import prism from 'prismjs';
+import 'prismjs/components/prism-jsx';
+import loadLanguages from 'prismjs/components/';
 import { P5, Setup, Draw, Canvas } from 'p5-react';
 import { appContext } from '../../App';
+import Markdown from 'react-markdown';
 import {
     Card,
     CardContent,
@@ -8,51 +13,93 @@ import {
     FormControlLabel,
     Typography,
     Box,
+    IconButton,
+    Tooltip,
 } from '@material-ui/core';
+import { Code } from '@material-ui/icons';
 import { useStyles } from './styles';
 
-export function SketchWrapper({ children, setup, draw, title, description }) {
-    const { state, setState } = useContext(appContext);
-    const toggleDebug = () => setState({ debug: !state.debug });
-    const classes = useStyles();
+console.log(loadLanguages);
 
+export function SketchWrapper({
+    children,
+    setup,
+    draw,
+    title,
+    description,
+    code,
+}) {
+    const { state, setState } = useContext(appContext);
+    const [showCode, setShowCode] = useState(false);
+    const classes = useStyles();
+    const toggleDebug = () => setState({ debug: !state.debug });
+    const toggleCode = () => setShowCode(c => !c);
+    const highlightedCode = useMemo(() => {
+        if (!code) return null;
+        return prism.highlight(code, prism.languages.jsx);
+    }, [code]);
     return (
         <Card>
             <CardContent component={Box} display="flex">
                 <Box>
-                    <FormControlLabel
-                        label="Debug"
-                        control={
-                            <Switch
-                                checked={state.debug}
-                                onChange={toggleDebug}
-                                name="debug-switch"
-                            />
-                        }
-                    />
-
                     <P5 options={state} className="canvas">
                         <Setup>
                             <Canvas
-                                width={500}
-                                height={500}
+                                width={350}
+                                height={350}
                                 canvasClassName={classes.canvas}
                             />
                             {setup}
                         </Setup>
                         <Draw>{draw}</Draw>
-                        {children}
+                        <FormControlLabel
+                            label="Debug"
+                            control={
+                                <Switch
+                                    checked={state.debug}
+                                    onChange={toggleDebug}
+                                    name="debug-switch"
+                                />
+                            }
+                        />
+                        {code && (
+                            <Tooltip
+                                title={showCode ? 'Hide code' : 'Show code'}
+                                placement="top-start"
+                                arrow
+                            >
+                                <IconButton
+                                    aria-label="Show code"
+                                    color="primary"
+                                    onClick={toggleCode}
+                                >
+                                    <Code />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                        {showCode && (
+                            <pre className="language-jsx">
+                                <code
+                                    className="language-jsx"
+                                    dangerouslySetInnerHTML={{
+                                        __html: highlightedCode,
+                                    }}
+                                ></code>
+                            </pre>
+                        )}
+                        <Box>{children}</Box>
                     </P5>
                 </Box>
+
                 <Box ml={4} px={2}>
                     <Typography
-                        variant="h3"
+                        variant="h4"
                         component="h2"
                         className={classes.title}
                     >
                         {title}
                     </Typography>
-                    {description}
+                    <Markdown source={description} />
                 </Box>
             </CardContent>
         </Card>

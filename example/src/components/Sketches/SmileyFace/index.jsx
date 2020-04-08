@@ -7,12 +7,12 @@ const HEAD_SIZE = 300;
 const EYE_SIZE = 80;
 const LEFT_EYE_POSITION = {
     x: p => p.width / 2 - HEAD_SIZE / 4,
-    y: 200,
+    y: 135,
 };
 
 const RIGHT_EYE_POSITION = {
     x: p => p.width / 2 + HEAD_SIZE / 4,
-    y: 200,
+    y: 135,
 };
 const SMILE_POSITION = {
     x: p => p.width / 2,
