@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
     List,
     ListItem,
@@ -12,14 +12,16 @@ import {
     Link,
     Container,
 } from '@material-ui/core';
-
 import { ExpandLess, ExpandMore, GitHub } from '@material-ui/icons';
+import routes from '../../routes';
 
 import { useStyles } from './styles';
 
 export function Layout({ children }) {
+    const { pathname } = useLocation();
     const [componentsOpen, setComponentsOpen] = useState(false);
     const [exemplesOpen, setExemplesOpen] = useState(false);
+
     const classes = useStyles();
     const toggleComponents = () => setComponentsOpen(!componentsOpen);
     const toggleExemples = () => setExemplesOpen(!exemplesOpen);
@@ -43,9 +45,17 @@ export function Layout({ children }) {
             </AppBar>
 
             <List component="nav" className={classes.list}>
-                <ListItem button component={RouterLink} to="/">
-                    <ListItemText primary="Home" />
-                </ListItem>
+                {routes.other.map(route => (
+                    <ListItem
+                        button
+                        key={route.name}
+                        selected={pathname === `${route.path}`}
+                        component={RouterLink}
+                        to={`${route.path}`}
+                    >
+                        <ListItemText primary={route.name} />
+                    </ListItem>
+                ))}
 
                 <ListItem button onClick={toggleComponents}>
                     <ListItemText primary="Components" />
@@ -53,12 +63,19 @@ export function Layout({ children }) {
                 </ListItem>
                 <Collapse in={componentsOpen} timeout="auto" unmountOnExit>
                     <List component="div" className={classes.subList}>
-                        <ListItem button component={RouterLink} to="/layer">
-                            <ListItemText primary="Layer" />
-                        </ListItem>
-                        <ListItem button component={RouterLink} to="/body">
-                            <ListItemText primary="Body" />
-                        </ListItem>
+                        {routes.components.map(route => (
+                            <ListItem
+                                button
+                                key={route.name}
+                                selected={
+                                    pathname === `/components${route.path}`
+                                }
+                                component={RouterLink}
+                                to={`/components${route.path}`}
+                            >
+                                <ListItemText primary={route.name} />
+                            </ListItem>
+                        ))}
                     </List>
                 </Collapse>
 
@@ -68,13 +85,17 @@ export function Layout({ children }) {
                 </ListItem>
                 <Collapse in={exemplesOpen} timeout="auto" unmountOnExit>
                     <List component="div" className={classes.subList}>
-                        <ListItem
-                            button
-                            component={RouterLink}
-                            to="/smileyface"
-                        >
-                            <ListItemText primary="Smiley Face" />
-                        </ListItem>
+                        {routes.examples.map(route => (
+                            <ListItem
+                                button
+                                key={route.name}
+                                selected={pathname === `/examples${route.path}`}
+                                component={RouterLink}
+                                to={`/examples${route.path}`}
+                            >
+                                <ListItemText primary={route.name} />
+                            </ListItem>
+                        ))}
                     </List>
                 </Collapse>
             </List>

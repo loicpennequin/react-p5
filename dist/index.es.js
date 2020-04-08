@@ -338,7 +338,8 @@ var useDraw = function useDraw(command) {
 var DEFAULT_OPTIONS = {
   clearOnDraw: false,
   frameRate: 60,
-  debug: false
+  debug: false,
+  pixelDensity: 1
 };
 var P5 = function P5(_ref) {
   var _useRef;
@@ -369,6 +370,7 @@ var P5 = function P5(_ref) {
         p.__id = 'ROOT';
 
         p.setup = function () {
+          p.pixelDensity(canvasOptions.pixelDensity);
           p.frameRate(canvasOptions.frameRate); // Basically I don't understand why I need to do this...
           // When Loading the component containing the sketch asynchronously via React.lazy(),
           // the setup function is executed before the <Commands /> inside <Setup /> had time to define the commands
@@ -395,7 +397,7 @@ var P5 = function P5(_ref) {
         };
       }));
     }
-  }, [canvasOptions.clearOnDraw, canvasOptions.frameRate, p5Instance]);
+  }, [canvasOptions.clearOnDraw, canvasOptions.frameRate, canvasOptions.pixelDensity, p5Instance]);
   var api = {
     p5Instance: p5Instance,
     getOptions: function getOptions() {

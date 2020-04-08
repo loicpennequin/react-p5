@@ -1,31 +1,73 @@
 import React, {
-    lazy,
     Suspense,
     createContext,
     useState,
     useCallback,
     useMemo,
 } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    useRouteMatch,
+} from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme } from './theme';
 import { CssBaseline } from '@material-ui/core';
+import routes from './routes';
 
 export const appContext = createContext();
 
-const Home = lazy(() =>
-    import(/* webpackChunkName: "home.page" */ './pages/Home')
-);
-const SmileyFace = lazy(() =>
-    import(/* webpackChunkName: "smiley.page" */ './pages/SmileyFace')
-);
-const Layer = lazy(() =>
-    import(/* webpackChunkName: "layer.page" */ './pages/Layer')
-);
-const Body = lazy(() => import(/* webpackChunkName: "body" */ './pages/Body'));
+function ExamplesRoutes() {
+    let { path } = useRouteMatch();
 
-function App() {
+    return (
+        <Switch>
+            {routes.examples.map(route => (
+                <Route
+                    key={route.name}
+                    path={`${path}${route.path}`}
+                    component={route.component}
+                    exact
+                />
+            ))}
+        </Switch>
+    );
+}
+
+function ComponentsRoutes() {
+    let { path } = useRouteMatch();
+    return (
+        <Switch>
+            {routes.components.map(route => (
+                <Route
+                    key={route.name}
+                    path={`${path}${route.path}`}
+                    component={route.component}
+                    exact
+                />
+            ))}
+        </Switch>
+    );
+}
+
+function OtherRoutes() {
+    return (
+        <Switch>
+            {routes.other.map(route => (
+                <Route
+                    key={route.name}
+                    path={route.path}
+                    component={route.component}
+                    exact
+                />
+            ))}
+        </Switch>
+    );
+}
+
+export default function App() {
     const [state, setState] = useState({
         clearOnDraw: true,
         debug: true,
@@ -48,14 +90,15 @@ function App() {
                     <Layout>
                         <Suspense fallback={<div>Loading...</div>}>
                             <Switch>
-                                <Route path="/" exact component={Home} />
                                 <Route
-                                    path="/smileyface"
-                                    exact
-                                    component={SmileyFace}
+                                    path="/examples"
+                                    component={ExamplesRoutes}
                                 />
-                                <Route path="/layer" exact component={Layer} />
-                                <Route path="/body" exact component={Body} />
+                                <Route
+                                    path="/components"
+                                    component={ComponentsRoutes}
+                                />
+                                <Route path="/" component={OtherRoutes} />
                             </Switch>
                         </Suspense>
                     </Layout>
@@ -64,5 +107,3 @@ function App() {
         </Router>
     );
 }
-
-export default App;
