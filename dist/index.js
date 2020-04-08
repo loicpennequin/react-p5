@@ -183,34 +183,6 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
-var Command = function Command(_ref) {
-  var command = _ref.command,
-      p = _ref.p;
-  var renderContext = React.useContext(P5RenderContext);
-  var commandIndex = React.useRef(null);
-  React.useEffect(function () {
-    var clear = renderContext.defineCommand(command, function () {
-      return p || renderContext.p5Instance;
-    }, commandIndex.current);
-    return function () {
-      commandIndex.current = clear();
-    };
-  }, [command, p, renderContext]);
-  return null;
-};
-
-var handleValueOrFunction = function handleValueOrFunction(p) {
-  for (var _len = arguments.length, values = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    values[_key - 1] = arguments[_key];
-  }
-
-  var returnValue = values.map(function (value) {
-    return typeof value === 'function' ? value(p) : value;
-  });
-  if (returnValue.length <= 1) return returnValue[0];
-  return returnValue;
-};
-
 function unwrapExports (x) {
 	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
 }
@@ -1954,67 +1926,34 @@ unwrapExports(lib);
 var lib_1 = lib.PropTypes;
 var lib_2 = lib.describe;
 
-function handleCommonProps(props, p) {
-  var applyProp = function applyProp(propName) {
-    if (!props.hasOwnProperty(propName)) return;
-    var value = handleValueOrFunction(p, props[propName]);
-    if (Array.isArray(value)) p[propName].apply(p, _toConsumableArray(value));else p[propName](value);
-  };
-
-  if (props.noFill) p.noFill();
-  if (props.noStroke) p.noStroke();
-  applyProp('ellipseMode');
-  applyProp('rectMode');
-  applyProp('angleMode');
-  applyProp('colorMode');
-  applyProp('fill');
-  applyProp('stroke');
-  applyProp('strokeJoin');
-  applyProp('strokeCap');
-  applyProp('strokeWeight');
-  applyProp('translate');
-  applyProp('rotate');
-  applyProp('scale');
-  applyProp('shearX');
-  applyProp('shearY');
-  applyProp('applyMatrix');
+function CommandComponent(_ref) {
+  var command = _ref.command,
+      p = _ref.p;
+  var renderContext = React.useContext(P5RenderContext);
+  var commandIndex = React.useRef(null);
+  React.useEffect(function () {
+    var clear = renderContext.defineCommand(command, function () {
+      return p || renderContext.p5Instance;
+    }, commandIndex.current);
+    return function () {
+      commandIndex.current = clear();
+    };
+  }, [command, p, renderContext]);
+  return null;
 }
 
-var generate = function generate(name) {
-  for (var _len = arguments.length, propTypes = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    propTypes[_key - 1] = arguments[_key];
-  }
-
-  return _defineProperty({}, name, lib_1.oneOfType([lib_1.func].concat(propTypes)).description("See [".concat(name, "](https://p5js.org/reference/#/p5/").concat(name, ")")));
+CommandComponent.displayName = 'Command';
+var Command = lib_2(CommandComponent).description("The most low-level P5-react component to interact with your sketch. Under the hood, almost every P5-react component uses it\n\nIt gets passed a command as a prop, which is a function recieving the p5 instance as an argument, and will get executed during setup or draw depending on where the component is placed.\nBasically, your Sketch will be a queue of `Command />` component that will get executed in the same order on each draw cycle.\n\nThe command prop may be updated at any time, and the result will appear on your sketch accordingly. The new command will take place at the same position in the commands queue, instead of being pushed at the end.");
+Command.propTypes = {
+  command: lib_1.func.description('The command to be executed on the p5 Sketch. It takes the p5 instance as a prop').isRequired,
+  p: lib_1.object.description('The p5 instance to be drawn onto by the command. If non is specified, it will draw on the current p5 Instance. see Layers for more informations on p5 instances.')
 };
-
-var commonPropTypes = Object.assign({}, generate('ellipseMode', lib_1.oneOf(['center', 'radius', 'corner', 'corners'])), generate('rectMode', lib_1.oneOf(['center', 'radius', 'corner', 'corners'])), generate('angleMode', lib_1.oneOf(['degrees', 'radians'])), generate('colorMode', lib_1.array, lib_1.oneOf(['rgb', 'hsb', 'hsl'])), generate('fill', lib_1.oneOfType([lib_1.array, lib_1.number, lib_1.string])), generate('stroke', lib_1.oneOfType([lib_1.array, lib_1.number, lib_1.string])), {
-  noFill: lib_1.bool.description("See [noFill](https://p5js.org/reference/#/p5/noFill)"),
-  noStroke: lib_1.bool.description("See [noStroke](https://p5js.org/reference/#/p5/noStroke)")
-}, generate('strokeJoin', lib_1.oneOf(['miter', 'bevel', 'round'])), generate('strokeJoin', lib_1.oneOf(['round', 'square', 'project'])), generate('strokeWeight', lib_1.number), generate('translate', lib_1.array), generate('rotate', lib_1.number, lib_1.array), generate('scale', lib_1.number, lib_1.array), generate('shearX', lib_1.number), generate('shearY', lib_1.number), generate('applyMatrix', lib_1.array));
-
-function PushPop(_ref) {
-  var children = _ref.children,
-      props = _objectWithoutProperties(_ref, ["children"]);
-
-  var push = React.useCallback(function (p) {
-    p.push();
-    handleCommonProps(props, p);
-  }, [props]);
-  var pop = React.useCallback(function (p) {
-    p.pop();
-  }, []);
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(Command, {
-    command: push
-  }), children, /*#__PURE__*/React__default.createElement(Command, {
-    command: pop
-  }));
-}
 
 function Debug() {
   var ctx = React.useContext(P5Context);
   var frameRateHistory = React.useRef([]);
   var displayDebugInfo = React.useCallback(function (p) {
+    p.push();
     p.fill(0, 100);
     p.noStroke();
     p.rect(0, 0, 185, 100);
@@ -2030,10 +1969,11 @@ function Debug() {
     if (fr > 200) fr.shift();
     var text = "Current frame rate: ".concat(fr, "\nAverage frame rate: ").concat(Math.round(avgFr), "\nPixel density: ").concat(p.pixelDensity(), "\nSetup commands: ").concat(ctx.getCommands().setup.length, "\nDraw commands: ").concat(ctx.getCommands().draw.length, "\n        ");
     p.text(text, 8, 18);
+    p.pop();
   }, [ctx]);
-  return /*#__PURE__*/React__default.createElement(PushPop, null, /*#__PURE__*/React__default.createElement(Command, {
+  return /*#__PURE__*/React__default.createElement(Command, {
     command: displayDebugInfo
-  }));
+  });
 }
 
 var P5RenderContext = React.createContext(null);
@@ -2206,8 +2146,71 @@ var P5 = function P5(_ref) {
   }, children);
 };
 
+function CanvasComponent(_ref) {
+  var width = _ref.width,
+      height = _ref.height,
+      _ref$renderer = _ref.renderer,
+      renderer = _ref$renderer === void 0 ? 'P2D' : _ref$renderer,
+      children = _ref.children,
+      canvasClassName = _ref.canvasClassName,
+      canvasStyle = _ref.canvasStyle,
+      props = _objectWithoutProperties(_ref, ["width", "height", "renderer", "children", "canvasClassName", "canvasStyle"]);
+
+  var _useContext = React.useContext(P5RenderContext),
+      rp = _useContext.rootP5Instance;
+
+  var canvasContainerRef = React.useRef(null);
+  var command = React.useCallback(function () {
+    var canvas = rp.createCanvas(width, height, renderer);
+    canvas.elt.className = canvasClassName;
+    canvas.elt.style = canvasStyle;
+    canvas.parent(canvasContainerRef.current);
+  }, [canvasClassName, canvasStyle, height, renderer, rp, width]);
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", _extends({
+    ref: canvasContainerRef
+  }, props)), /*#__PURE__*/React__default.createElement(Command, {
+    command: command
+  }, children));
+}
+
+CanvasComponent.displayName = 'Canvas';
+var Canvas = lib_2(CanvasComponent).description("The `<Canvas>` component will create a new canvas for you to draw things on.\n\nIt is the equivalent of calling [p5.createCanvas()](https://p5js.org/reference/#/p5/createCanvas)\n");
+Canvas.propTypes = {
+  width: lib_1.oneOfType([lib_1.func, lib_1.number]).description('The width of the canvas in pixels').isRequired,
+  height: lib_1.oneOfType([lib_1.func, lib_1.number]).description('The width of the canvas in pixels').isRequired,
+  renderer: lib_1.oneOf('P2D', 'WEBGL').description('The renderer to be used for the canvas. Defaults to P2D'),
+  canvasClassName: lib_1.string.description('The classname passed to created the canvas DOM element'),
+  canvasStyle: lib_1.object.description('The stylepassed to the createdcanvas DOM element')
+};
+
+var handleValueOrFunction = function handleValueOrFunction(p) {
+  for (var _len = arguments.length, values = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    values[_key - 1] = arguments[_key];
+  }
+
+  var returnValue = values.map(function (value) {
+    return typeof value === 'function' ? value(p) : value;
+  });
+  if (returnValue.length <= 1) return returnValue[0];
+  return returnValue;
+};
+
+function Background(_ref) {
+  var color = _ref.color,
+      children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["color", "children"]);
+
+  var command = React.useCallback(function (p) {
+    p.background(handleValueOrFunction(p, color));
+  }, [color]);
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(Command, {
+    command: command
+  }), children);
+}
+
 var EMPTY_ARRAY = Object.freeze([]);
-function Layer(_ref) {
+
+function LayerComponent(_ref) {
   var _ref$autoClear = _ref.autoClear,
       autoClear = _ref$autoClear === void 0 ? true : _ref$autoClear,
       _ref$children = _ref.children,
@@ -2350,7 +2353,22 @@ function Layer(_ref) {
   })));
 }
 
-function Mask(_ref) {
+LayerComponent.displayName = 'Layer';
+var Layer = lib_2(LayerComponent).description('Todo Layer description');
+Layer.propTypes = {
+  autoClear: lib_1.bool.description('todo'),
+  blendMode: lib_1.oneOfType([lib_1.func, lib_1.string]).description('todo'),
+  opacity: lib_1.number.description('todo'),
+  filters: lib_1.array.description('todo'),
+  isStatic: lib_1.bool.description('todo'),
+  applyFunction: lib_1.func.description('todo'),
+  id: lib_1.string.description('todo'),
+  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
+  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
+  size: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The size of the shape in pixels').isRequired
+};
+
+function MaskComponent(_ref) {
   var id = _ref.id,
       children = _ref.children,
       props = _objectWithoutProperties(_ref, ["id", "children"]);
@@ -2371,34 +2389,79 @@ function Mask(_ref) {
   }, props), children);
 }
 
-function Canvas(_ref) {
-  var width = _ref.width,
-      height = _ref.height,
-      _ref$renderer = _ref.renderer,
-      renderer = _ref$renderer === void 0 ? 'P2D' : _ref$renderer,
-      children = _ref.children,
-      canvasClassName = _ref.canvasClassName,
-      canvasStyle = _ref.canvasStyle,
-      props = _objectWithoutProperties(_ref, ["width", "height", "renderer", "children", "canvasClassName", "canvasStyle"]);
+MaskComponent.displayName = 'Mask';
+var Mask = lib_2(MaskComponent).description('todo');
+Mask.propTypes = {
+  autoClear: lib_1.bool.description('todo'),
+  blendMode: lib_1.oneOfType([lib_1.func, lib_1.string]).description('todo'),
+  opacity: lib_1.number.description('todo'),
+  filters: lib_1.array.description('todo'),
+  isStatic: lib_1.bool.description('todo'),
+  applyFunction: lib_1.func.description('todo'),
+  id: lib_1.string.description('todo'),
+  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
+  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
+  size: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The size of the shape in pixels').isRequired
+};
 
-  var _useContext = React.useContext(P5RenderContext),
-      rp = _useContext.rootP5Instance;
+function handleCommonProps(props, p) {
+  var applyProp = function applyProp(propName) {
+    if (!props.hasOwnProperty(propName)) return;
+    var value = handleValueOrFunction(p, props[propName]);
+    if (Array.isArray(value)) p[propName].apply(p, _toConsumableArray(value));else p[propName](value);
+  };
 
-  var canvasContainerRef = React.useRef(null);
-  var command = React.useCallback(function () {
-    var canvas = rp.createCanvas(width, height, renderer);
-    canvas.elt.className = canvasClassName;
-    canvas.elt.style = canvasStyle;
-    canvas.parent(canvasContainerRef.current);
-  }, [canvasClassName, canvasStyle, height, renderer, rp, width]);
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement("div", _extends({
-    ref: canvasContainerRef
-  }, props)), /*#__PURE__*/React__default.createElement(Command, {
-    command: command
-  }, children));
+  if (props.noFill) p.noFill();
+  if (props.noStroke) p.noStroke();
+  applyProp('ellipseMode');
+  applyProp('rectMode');
+  applyProp('angleMode');
+  applyProp('colorMode');
+  applyProp('fill');
+  applyProp('stroke');
+  applyProp('strokeJoin');
+  applyProp('strokeCap');
+  applyProp('strokeWeight');
+  applyProp('translate');
+  applyProp('rotate');
+  applyProp('scale');
+  applyProp('shearX');
+  applyProp('shearY');
+  applyProp('applyMatrix');
 }
 
-function Rectangle(_ref) {
+var generate = function generate(name) {
+  for (var _len = arguments.length, propTypes = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    propTypes[_key - 1] = arguments[_key];
+  }
+
+  return _defineProperty({}, name, lib_1.oneOfType([lib_1.func].concat(propTypes)).description("See [".concat(name, "](https://p5js.org/reference/#/p5/").concat(name, ")")));
+};
+
+var commonPropTypes = Object.assign({}, generate('ellipseMode', lib_1.oneOf(['center', 'radius', 'corner', 'corners'])), generate('rectMode', lib_1.oneOf(['center', 'radius', 'corner', 'corners'])), generate('angleMode', lib_1.oneOf(['degrees', 'radians'])), generate('colorMode', lib_1.array, lib_1.oneOf(['rgb', 'hsb', 'hsl'])), generate('fill', lib_1.oneOfType([lib_1.array, lib_1.number, lib_1.string])), generate('stroke', lib_1.oneOfType([lib_1.array, lib_1.number, lib_1.string])), {
+  noFill: lib_1.bool.description("See [noFill](https://p5js.org/reference/#/p5/noFill)"),
+  noStroke: lib_1.bool.description("See [noStroke](https://p5js.org/reference/#/p5/noStroke)")
+}, generate('strokeJoin', lib_1.oneOf(['miter', 'bevel', 'round'])), generate('strokeJoin', lib_1.oneOf(['round', 'square', 'project'])), generate('strokeWeight', lib_1.number), generate('translate', lib_1.array), generate('rotate', lib_1.number, lib_1.array), generate('scale', lib_1.number, lib_1.array), generate('shearX', lib_1.number), generate('shearY', lib_1.number), generate('applyMatrix', lib_1.array));
+
+function PushPop(_ref) {
+  var children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["children"]);
+
+  var push = React.useCallback(function (p) {
+    p.push();
+    handleCommonProps(props, p);
+  }, [props]);
+  var pop = React.useCallback(function (p) {
+    p.pop();
+  }, []);
+  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(Command, {
+    command: push
+  }), children, /*#__PURE__*/React__default.createElement(Command, {
+    command: pop
+  }));
+}
+
+function RectangleComponent(_ref) {
   var x = _ref.x,
       y = _ref.y,
       width = _ref.width,
@@ -2415,6 +2478,15 @@ function Rectangle(_ref) {
   }), children);
 }
 
+RectangleComponent.displayName = 'Rectangle';
+var Rectangle = lib_2(RectangleComponent).description("The `<Rectangle>` component allows you to draw an rectangle to the screen. \n\nIt is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/rectangle).");
+Rectangle.propTypes = _objectSpread2({
+  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
+  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
+  width: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired,
+  height: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired
+}, commonPropTypes);
+
 var FullCanvasRectangle = function FullCanvasRectangle() {
   return /*#__PURE__*/React__default.createElement(Rectangle, {
     x: 0,
@@ -2429,7 +2501,7 @@ var FullCanvasRectangle = function FullCanvasRectangle() {
   });
 };
 
-function LinearGradient(_ref) {
+function LinearGradientComponent(_ref) {
   var _ref$x = _ref.x,
       x = _ref$x === void 0 ? 0 : _ref$x,
       _ref$y = _ref.y,
@@ -2521,7 +2593,18 @@ function LinearGradient(_ref) {
   }), children || /*#__PURE__*/React__default.createElement(FullCanvasRectangle, null));
 }
 
-function Body(_ref) {
+LinearGradientComponent.displayName = 'LinearGradient';
+var LinearGradient = lib_2(LinearGradientComponent).description('todo');
+LinearGradient.propTypes = _objectSpread2({
+  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
+  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
+  width: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired,
+  height: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired,
+  colors: lib_1.oneOfType([lib_1.func, lib_1.array]),
+  angle: lib_1.oneOfType([lib_1.func, lib_1.number])
+}, commonPropTypes);
+
+function BodyComponent(_ref) {
   var model = _ref.model,
       children = _ref.children;
 
@@ -2565,8 +2648,13 @@ function Body(_ref) {
     command: command
   }), objectState && children(objectState.state));
 }
+BodyComponent.displayName = 'Body';
+var Body = lib_2(BodyComponent).description("The `<Body>` component allows you to easily render moving object, \nby providing a constructor function via the `model` prop that contains an `update()` method. \nThe update method will be called on every `draw` cycle by the P5 Instance.");
+Body.propTypes = {
+  model: lib_1.func.description('a constructor function that takes the p5 instance as a parameter. It must return an object containing the `update()` method').isRequired
+};
 
-function Arc(_ref) {
+function ArcComponent(_ref) {
   var x = _ref.x,
       y = _ref.y,
       height = _ref.height,
@@ -2585,8 +2673,9 @@ function Arc(_ref) {
   }), children);
 }
 
-var ArcWithSchema = lib_2(Arc).description("The `<Arc>` component allows you to draw an arc to the screen. \n\nIt is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/arc).");
-CircleWithSchema.propTypes = _objectSpread2({
+ArcComponent.displayName = 'Arc';
+var Arc = lib_2(ArcComponent).description("The `<Arc>` component allows you to draw an arc to the screen. \n\nIt is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/arc).");
+Arc.propTypes = _objectSpread2({
   x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
   y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
   width: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired,
@@ -2595,20 +2684,7 @@ CircleWithSchema.propTypes = _objectSpread2({
   stop: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The angle to stop the arc').isRequired
 }, commonPropTypes);
 
-function Background(_ref) {
-  var color = _ref.color,
-      children = _ref.children,
-      props = _objectWithoutProperties(_ref, ["color", "children"]);
-
-  var command = React.useCallback(function (p) {
-    p.background(handleValueOrFunction(p, color));
-  }, [color]);
-  return /*#__PURE__*/React__default.createElement(React__default.Fragment, null, /*#__PURE__*/React__default.createElement(Command, {
-    command: command
-  }), children);
-}
-
-function Circle(_ref) {
+function CircleComponent(_ref) {
   var x = _ref.x,
       y = _ref.y,
       size = _ref.size,
@@ -2624,14 +2700,15 @@ function Circle(_ref) {
   }), children);
 }
 
-var CircleWithSchema$1 = lib_2(Circle).description("The `<Circle>` component allows you to draw a circle on the screen. \n\nIt is the equivalent of calling [p5.circle()](https://p5js.org/reference/#/p5/circle).");
-CircleWithSchema$1.propTypes = _objectSpread2({
+CircleComponent.displayName = 'Circle';
+var Circle = lib_2(CircleComponent).description("The `<Circle>` component allows you to draw a circle to the screen. \n\nIt is the equivalent of calling [p5.circle()](https://p5js.org/reference/#/p5/circle).");
+Circle.propTypes = _objectSpread2({
   x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
   y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
   size: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The size of the shape in pixels').isRequired
 }, commonPropTypes);
 
-function Ellipse(_ref) {
+function EllipseComponent(_ref) {
   var x = _ref.x,
       y = _ref.y,
       width = _ref.width,
@@ -2648,7 +2725,16 @@ function Ellipse(_ref) {
   }), children);
 }
 
-function Line(_ref) {
+EllipseComponent.displayName = 'Ellipse';
+var Ellipse = lib_2(EllipseComponent).description("The `<Ellipse>` component allows you to draw an ellipse to the screen. \n\nIt is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/ellipse).");
+Ellipse.propTypes = _objectSpread2({
+  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
+  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
+  width: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired,
+  height: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The width of the shape in pixels').isRequired
+}, commonPropTypes);
+
+function LineComponent(_ref) {
   var from = _ref.from,
       to = _ref.to,
       children = _ref.children,
@@ -2663,7 +2749,14 @@ function Line(_ref) {
   }), children);
 }
 
-function Point(_ref) {
+LineComponent.displayName = 'Line';
+var Line = lib_2(LineComponent).description("The `<Line>` component allows you to draw a line to the screen. \n\nIt is the equivalent of calling [p5.line()](https://p5js.org/reference/#/p5/line).");
+Line.propTypes = _objectSpread2({
+  from: lib_1.oneOfType([lib_1.number, lib_1.func]).description('An array of two numbers contaiing the x and y coordinates for the start of the line').isRequired,
+  to: lib_1.oneOfType([lib_1.number, lib_1.func]).description('An array of two numbers contaiing the x and y coordinates for the end of the line').isRequired
+}, commonPropTypes);
+
+function PointComponent(_ref) {
   var x = _ref.x,
       y = _ref.y,
       children = _ref.children,
@@ -2678,7 +2771,14 @@ function Point(_ref) {
   }), children);
 }
 
-function Square(_ref) {
+PointComponent.displayName = 'Point';
+var Point = lib_2(PointComponent).description("The `<Point>` component allows you to draw a point to the screen. \n\nIt is the equivalent of calling [p5.point()](https://p5js.org/reference/#/p5/point).");
+Point.propTypes = _objectSpread2({
+  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
+  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired
+}, commonPropTypes);
+
+function SquareComponent(_ref) {
   var x = _ref.x,
       y = _ref.y,
       size = _ref.size,
@@ -2694,11 +2794,19 @@ function Square(_ref) {
   }), children);
 }
 
-exports.Arc = ArcWithSchema;
+SquareComponent.displayName = 'Square';
+var Square = lib_2(SquareComponent).description("The `<Square>` component allows you to draw a square to the screen. \n\nIt is the equivalent of calling [p5.square()](https://p5js.org/reference/#/p5/square).");
+Square.propTypes = _objectSpread2({
+  x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
+  y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
+  size: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The size of the shape in pixels').isRequired
+}, commonPropTypes);
+
+exports.Arc = Arc;
 exports.Background = Background;
 exports.Body = Body;
 exports.Canvas = Canvas;
-exports.Circle = CircleWithSchema$1;
+exports.Circle = Circle;
 exports.Command = Command;
 exports.Debug = Debug;
 exports.Draw = Draw;

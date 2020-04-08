@@ -4,7 +4,6 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemIcon,
     Collapse,
     AppBar,
     Typography,

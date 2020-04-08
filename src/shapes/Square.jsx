@@ -4,7 +4,7 @@ import { handleCommonProps, commonPropTypes } from '../utils/handleCommonProps';
 import { handleValueOrFunction } from '../utils/handleValueOrFunction';
 import { describe, PropTypes } from 'react-desc';
 
-export function Square({ x, y, size, children, ...props }) {
+function SquareComponent({ x, y, size, children, ...props }) {
     const command = useCallback(
         p => {
             handleCommonProps(props, p);
@@ -21,12 +21,14 @@ export function Square({ x, y, size, children, ...props }) {
     );
 }
 
-const SquareWithSchema = describe(Square)
+SquareComponent.displayName = 'Square';
+
+export const Square = describe(SquareComponent)
     .description(`The \`<Square>\` component allows you to draw a square to the screen. 
 
 It is the equivalent of calling [p5.square()](https://p5js.org/reference/#/p5/square).`);
 
-SquareWithSchema.propTypes = {
+Square.propTypes = {
     x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'The x-coordinate of the shape'
     ).isRequired,

@@ -4,7 +4,7 @@ import { handleCommonProps, commonPropTypes } from '../utils/handleCommonProps';
 import { handleValueOrFunction } from '../utils/handleValueOrFunction';
 import { describe, PropTypes } from 'react-desc';
 
-export function Line({ from, to, children, ...props }) {
+function LineComponent({ from, to, children, ...props }) {
     const command = useCallback(
         p => {
             handleCommonProps(props, p);
@@ -19,13 +19,14 @@ export function Line({ from, to, children, ...props }) {
         </>
     );
 }
+LineComponent.displayName = 'Line';
 
-export const LineWithSchema = describe(Line)
+export const Line = describe(LineComponent)
     .description(`The \`<Line>\` component allows you to draw a line to the screen. 
 
 It is the equivalent of calling [p5.line()](https://p5js.org/reference/#/p5/line).`);
 
-LineWithSchema.propTypes = {
+Line.propTypes = {
     from: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'An array of two numbers contaiing the x and y coordinates for the start of the line'
     ).isRequired,

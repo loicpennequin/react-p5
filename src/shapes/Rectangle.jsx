@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { Command } from '../Command';
-import { handleCommonProps } from '../utils/handleCommonProps';
+import { handleCommonProps, commonPropTypes } from '../utils/handleCommonProps';
 import { handleValueOrFunction } from '../utils/handleValueOrFunction';
 import { describe, PropTypes } from 'react-desc';
 
-export function Rectangle({ x, y, width, height, children, ...props }) {
+function RectangleComponent({ x, y, width, height, children, ...props }) {
     const command = useCallback(
         p => {
             handleCommonProps(props, p);
@@ -19,13 +19,14 @@ export function Rectangle({ x, y, width, height, children, ...props }) {
         </>
     );
 }
+RectangleComponent.displayName = 'Rectangle';
 
-export const RectangleWithSchema = describe(Rectangle)
+export const Rectangle = describe(RectangleComponent)
     .description(`The \`<Rectangle>\` component allows you to draw an rectangle to the screen. 
 
 It is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/rectangle).`);
 
-rectangleWithSchema.propTypes = {
+Rectangle.propTypes = {
     x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'The x-coordinate of the shape'
     ).isRequired,

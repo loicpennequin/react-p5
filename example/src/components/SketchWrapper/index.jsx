@@ -10,7 +10,6 @@ import {
     CardContent,
     Switch,
     FormControlLabel,
-    Typography,
     Box,
     IconButton,
     Tooltip,

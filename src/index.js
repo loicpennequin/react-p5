@@ -10,10 +10,10 @@ export { Debug } from './Debug';
 export { LinearGradient } from './LinearGradient';
 export { Body } from './Body';
 
-export { ArcWithSchema as Arc } from './shapes/Arc';
-export { CircleWithSchema as Circle } from './shapes/Circle';
-export { EllipseWithSchema as Ellipse } from './shapes/Ellipse';
-export { LineWithSchema as Line } from './shapes/Line';
-export { PointWithSchema as Point } from './shapes/Point';
-export { RectangleWithSchema as Rectangle } from './shapes/Rectangle';
-export { SquareWithSchema as Square } from './shapes/Square';
+export { Arc } from './shapes/Arc';
+export { Circle } from './shapes/Circle';
+export { Ellipse } from './shapes/Ellipse';
+export { Line } from './shapes/Line';
+export { Point } from './shapes/Point';
+export { Rectangle } from './shapes/Rectangle';
+export { Square } from './shapes/Square';

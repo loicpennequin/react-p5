@@ -11,12 +11,6 @@ import {
 import { Circle, Body } from 'p5-react';
 import { useTheme } from '@material-ui/core/styles';
 
-const description = `
-The \`<Body>\` component allows you to easily render moving object, 
-by providing a constructor function via the \`model\` prop that contains an \`update()\` method. 
-The update method will be called on every \`draw\` cycle by the P5 Instance.
-`;
-
 export default function BodyPage() {
     const theme = useTheme();
     const [model, setModel] = useState('bouncing');
@@ -36,7 +30,7 @@ export default function BodyPage() {
     return (
         <SketchWrapper
             title="Body"
-            description={description}
+            description={Body.toMarkdown()}
             githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/Body.jsx"
             draw={
                 <Body model={models[model]}>

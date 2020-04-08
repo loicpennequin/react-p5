@@ -8,9 +8,10 @@ import React, {
 import { Command } from './Command';
 import { P5RenderContext } from './RenderContext';
 import { handleValueOrFunction } from './utils/handleValueOrFunction';
-const EMPTY_ARRAY = Object.freeze([]);
+import { describe, PropTypes } from 'react-desc';
 
-export function Layer({
+const EMPTY_ARRAY = Object.freeze([]);
+function LayerComponent({
     autoClear = true,
     children = null,
     blendMode = 'BLEND',
@@ -160,3 +161,30 @@ export function Layer({
         </P5RenderContext.Provider>
     );
 }
+LayerComponent.displayName = 'Layer';
+
+export const Layer = describe(LayerComponent).description(
+    'Todo Layer description'
+);
+
+Layer.propTypes = {
+    autoClear: PropTypes.bool.description('todo'),
+    blendMode: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.string,
+    ]).description('todo'),
+    opacity: PropTypes.number.description('todo'),
+    filters: PropTypes.array.description('todo'),
+    isStatic: PropTypes.bool.description('todo'),
+    applyFunction: PropTypes.func.description('todo'),
+    id: PropTypes.string.description('todo'),
+    x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
+        'The x-coordinate of the shape'
+    ).isRequired,
+    y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
+        'The y-coordinate of the shape'
+    ).isRequired,
+    size: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
+        'The size of the shape in pixels'
+    ).isRequired,
+};

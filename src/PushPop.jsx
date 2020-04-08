@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import { Command } from './Command';
-import { handleCommonProps } from './utils/handleCommonProps';
+import { handleCommonProps, commonPropTypes } from '../utils/handleCommonProps';
+import { describe } from 'react-desc';
 
-export function PushPop({ children, ...props }) {
+function PushPopComponent({ children, ...props }) {
     const push = useCallback(
         p => {
             p.push();
@@ -22,3 +23,8 @@ export function PushPop({ children, ...props }) {
         </>
     );
 }
+PushPopComponent.displayName = 'PushPop';
+
+export const PushPop = describe(PushPopComponent).describe('Todo');
+
+PushPop.propTypes = commonPropTypes;

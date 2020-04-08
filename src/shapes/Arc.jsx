@@ -4,7 +4,16 @@ import { handleCommonProps, commonPropTypes } from '../utils/handleCommonProps';
 import { handleValueOrFunction } from '../utils/handleValueOrFunction';
 import { describe, PropTypes } from 'react-desc';
 
-function Arc({ x, y, height, width, start, stop, children, ...props }) {
+function ArcComponent({
+    x,
+    y,
+    height,
+    width,
+    start,
+    stop,
+    children,
+    ...props
+}) {
     const command = useCallback(
         p => {
             handleCommonProps(props, p);
@@ -21,13 +30,14 @@ function Arc({ x, y, height, width, start, stop, children, ...props }) {
         </>
     );
 }
+ArcComponent.displayName = 'Arc';
 
-export const ArcWithSchema = describe(Arc)
+export const Arc = describe(ArcComponent)
     .description(`The \`<Arc>\` component allows you to draw an arc to the screen. 
 
 It is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/arc).`);
 
-ArcWithSchema.propTypes = {
+Arc.propTypes = {
     x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'The x-coordinate of the shape'
     ).isRequired,

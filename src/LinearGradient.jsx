@@ -3,9 +3,10 @@ import { Command } from './Command';
 import { P5RenderContext } from './RenderContext';
 import { Rectangle } from './shapes/Rectangle';
 import { PushPop } from './PushPop';
-import { handleCommonProps } from './utils/handleCommonProps';
+import { handleCommonProps, commonPropTypes } from './utils/handleCommonProps';
 import { handleValueOrFunction } from './utils/handleValueOrFunction';
 import p5 from 'p5';
+import { describe, PropTypes } from 'react-desc';
 
 const FullCanvasRectangle = () => (
     <Rectangle
@@ -16,7 +17,7 @@ const FullCanvasRectangle = () => (
         noStroke
     />
 );
-export function LinearGradient({
+function LinearGradientComponent({
     x = 0,
     y = 0,
     width,
@@ -115,3 +116,27 @@ export function LinearGradient({
         </PushPop>
     );
 }
+
+LinearGradientComponent.displayName = 'LinearGradient';
+
+export const LinearGradient = describe(LinearGradientComponent).description(
+    'todo'
+);
+
+LinearGradient.propTypes = {
+    x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
+        'The x-coordinate of the shape'
+    ).isRequired,
+    y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
+        'The y-coordinate of the shape'
+    ).isRequired,
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
+        'The width of the shape in pixels'
+    ).isRequired,
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
+        'The width of the shape in pixels'
+    ).isRequired,
+    colors: PropTypes.oneOfType([PropTypes.func, PropTypes.array]),
+    angle: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
+    ...commonPropTypes,
+};

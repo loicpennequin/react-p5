@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { Command } from '../Command';
-import { handleCommonProps } from '../utils/handleCommonProps';
+import { handleCommonProps, commonPropTypes } from '../utils/handleCommonProps';
 import { handleValueOrFunction } from '../utils/handleValueOrFunction';
 import { describe, PropTypes } from 'react-desc';
 
-function Ellipse({ x, y, width, height, children, ...props }) {
+function EllipseComponent({ x, y, width, height, children, ...props }) {
     const command = useCallback(
         p => {
             handleCommonProps(props, p);
@@ -19,13 +19,14 @@ function Ellipse({ x, y, width, height, children, ...props }) {
         </>
     );
 }
+EllipseComponent.displayName = 'Ellipse';
 
-export const EllipseWithSchema = describe(Ellipse)
+export const Ellipse = describe(EllipseComponent)
     .description(`The \`<Ellipse>\` component allows you to draw an ellipse to the screen. 
 
 It is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/ellipse).`);
 
-EllipseWithSchema.propTypes = {
+Ellipse.propTypes = {
     x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
         'The x-coordinate of the shape'
     ).isRequired,
