@@ -38,6 +38,7 @@ const DEFAULT_OPTIONS = {
     clearOnDraw: false,
     frameRate: 60,
     debug: false,
+    pixelDensity: 1,
 };
 
 export const P5 = ({ options, children, ...props }) => {
@@ -65,6 +66,7 @@ export const P5 = ({ options, children, ...props }) => {
                     p.__id = 'ROOT';
 
                     p.setup = () => {
+                        p.pixelDensity(canvasOptions.pixelDensity);
                         p.frameRate(canvasOptions.frameRate);
                         // Basically I don't understand why I need to do this...
                         // When Loading the component containing the sketch asynchronously via React.lazy(),
