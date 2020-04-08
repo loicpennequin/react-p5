@@ -9,13 +9,14 @@ export function Debug() {
 
     const displayDebugInfo = useCallback(
         p => {
-            p.fill(0, 80);
+            p.fill(0, 100);
             p.noStroke();
-            p.rect(0, 0, 185, 95);
+            p.rect(0, 0, 185, 100);
 
             p.fill(255);
             p.textFont('Courier');
-            p.textLeading(20);
+            p.textSize(12);
+            p.textLeading(18);
             const fr = Math.round(p.frameRate());
             const avgFr =
                 frameRateHistory.current.reduce(
@@ -26,6 +27,7 @@ export function Debug() {
             if (fr > 200) fr.shift();
             const text = `Current frame rate: ${fr}
 Average frame rate: ${Math.round(avgFr)}
+Pixel density: ${p.pixelDensity()}
 Setup commands: ${ctx.getCommands().setup.length}
 Draw commands: ${ctx.getCommands().draw.length}
         `;

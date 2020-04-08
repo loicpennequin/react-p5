@@ -252,19 +252,20 @@ function Debug() {
   var ctx = useContext(P5Context);
   var frameRateHistory = useRef([]);
   var displayDebugInfo = useCallback(function (p) {
-    p.fill(0, 80);
+    p.fill(0, 100);
     p.noStroke();
-    p.rect(0, 0, 185, 95);
+    p.rect(0, 0, 185, 100);
     p.fill(255);
     p.textFont('Courier');
-    p.textLeading(20);
+    p.textSize(12);
+    p.textLeading(18);
     var fr = Math.round(p.frameRate());
     var avgFr = frameRateHistory.current.reduce(function (total, curr) {
       return total + curr;
     }, 0) / frameRateHistory.current.length;
     frameRateHistory.current.push(fr);
     if (fr > 200) fr.shift();
-    var text = "Current frame rate: ".concat(fr, "\nAverage frame rate: ").concat(Math.round(avgFr), "\nSetup commands: ").concat(ctx.getCommands().setup.length, "\nDraw commands: ").concat(ctx.getCommands().draw.length, "\n        ");
+    var text = "Current frame rate: ".concat(fr, "\nAverage frame rate: ").concat(Math.round(avgFr), "\nPixel density: ").concat(p.pixelDensity(), "\nSetup commands: ").concat(ctx.getCommands().setup.length, "\nDraw commands: ").concat(ctx.getCommands().draw.length, "\n        ");
     p.text(text, 8, 18);
   }, [ctx]);
   return /*#__PURE__*/React.createElement(PushPop, null, /*#__PURE__*/React.createElement(Command, {
