@@ -92,7 +92,12 @@ export const P5 = ({ options, children, ...props }) => {
                 })
             );
         }
-    }, [canvasOptions.clearOnDraw, canvasOptions.frameRate, p5Instance]);
+    }, [
+        canvasOptions.clearOnDraw,
+        canvasOptions.frameRate,
+        canvasOptions.pixelDensity,
+        p5Instance,
+    ]);
 
     const api = {
         p5Instance,
