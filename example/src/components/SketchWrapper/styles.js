@@ -10,5 +10,8 @@ export const useStyles = makeStyles(theme => {
         title: {
             borderBottom: `solid 3px ${theme.palette.primary.light}`,
         },
+        preview: {
+            width: '40%',
+        },
     };
 });

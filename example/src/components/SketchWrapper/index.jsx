@@ -2,7 +2,6 @@ import 'prismjs/themes/prism-tomorrow.css';
 import React, { useContext, useState, useMemo } from 'react';
 import prism from 'prismjs';
 import 'prismjs/components/prism-jsx';
-import loadLanguages from 'prismjs/components/';
 import { P5, Setup, Draw, Canvas } from 'p5-react';
 import { appContext } from '../../App';
 import Markdown from 'react-markdown';
@@ -16,10 +15,9 @@ import {
     IconButton,
     Tooltip,
 } from '@material-ui/core';
+import jsxToString from 'react-element-to-jsx-string';
 import { Code } from '@material-ui/icons';
 import { useStyles } from './styles';
-
-console.log(loadLanguages);
 
 export function SketchWrapper({
     children,
@@ -34,14 +32,20 @@ export function SketchWrapper({
     const classes = useStyles();
     const toggleDebug = () => setState({ debug: !state.debug });
     const toggleCode = () => setShowCode(c => !c);
+
     const highlightedCode = useMemo(() => {
-        if (!code) return null;
+        if (!code) {
+            return prism.highlight(
+                jsxToString(draw, { showFunctions: true }),
+                prism.languages.jsx
+            );
+        }
         return prism.highlight(code, prism.languages.jsx);
-    }, [code]);
+    }, [code, draw]);
     return (
         <Card>
             <CardContent component={Box} display="flex">
-                <Box>
+                <Box className={classes.preview}>
                     <P5 options={state} className="canvas">
                         <Setup>
                             <Canvas
@@ -62,21 +66,20 @@ export function SketchWrapper({
                                 />
                             }
                         />
-                        {code && (
-                            <Tooltip
-                                title={showCode ? 'Hide code' : 'Show code'}
-                                placement="top-start"
-                                arrow
+
+                        <Tooltip
+                            title={showCode ? 'Hide code' : 'Show code'}
+                            placement="top-start"
+                            arrow
+                        >
+                            <IconButton
+                                aria-label="Show code"
+                                color="primary"
+                                onClick={toggleCode}
                             >
-                                <IconButton
-                                    aria-label="Show code"
-                                    color="primary"
-                                    onClick={toggleCode}
-                                >
-                                    <Code />
-                                </IconButton>
-                            </Tooltip>
-                        )}
+                                <Code />
+                            </IconButton>
+                        </Tooltip>
                         {showCode && (
                             <pre className="language-jsx">
                                 <code
