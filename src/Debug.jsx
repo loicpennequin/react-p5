@@ -28,8 +28,8 @@ export function Debug() {
             const text = `Current frame rate: ${fr}
 Average frame rate: ${Math.round(avgFr)}
 Pixel density: ${p.pixelDensity()}
-Setup commands: ${ctx.getCommands().setup.length}
-Draw commands: ${ctx.getCommands().draw.length}
+Setup commands: ${ctx.getRootState().setup.length}
+Draw commands: ${ctx.getRootState().draw.length}
         `;
             p.text(text, 8, 18);
             p.pop();

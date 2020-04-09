@@ -1960,7 +1960,7 @@ function Debug() {
     }, 0) / frameRateHistory.current.length;
     frameRateHistory.current.push(fr);
     if (fr > 200) fr.shift();
-    var text = "Current frame rate: ".concat(fr, "\nAverage frame rate: ").concat(Math.round(avgFr), "\nPixel density: ").concat(p.pixelDensity(), "\nSetup commands: ").concat(ctx.getCommands().setup.length, "\nDraw commands: ").concat(ctx.getCommands().draw.length, "\n        ");
+    var text = "Current frame rate: ".concat(fr, "\nAverage frame rate: ").concat(Math.round(avgFr), "\nPixel density: ").concat(p.pixelDensity(), "\nSetup commands: ").concat(ctx.getRootState().setup.length, "\nDraw commands: ").concat(ctx.getRootState().draw.length, "\n        ");
     p.text(text, 8, 18);
     p.pop();
   }, [ctx]);
@@ -1977,14 +1977,14 @@ var RenderContextProvider = function RenderContextProvider(_ref) {
   var _useContext = useContext(P5Context),
       p5Instance = _useContext.p5Instance,
       defineCommandFactory = _useContext.defineCommandFactory,
-      getOptions = _useContext.getOptions;
+      ctx = _objectWithoutProperties(_useContext, ["p5Instance", "defineCommandFactory"]);
 
-  var api = {
+  var api = _objectSpread2({
     defineCommand: defineCommandFactory(step),
     rootP5Instance: p5Instance,
-    p5Instance: p5Instance,
-    getOptions: getOptions
-  };
+    p5Instance: p5Instance
+  }, ctx);
+
   if (!p5Instance) return null;
   return /*#__PURE__*/React.createElement(P5RenderContext.Provider, {
     value: api
@@ -2054,7 +2054,7 @@ var P5 = function P5(_ref) {
   var canvasOptions = useMemo(function () {
     return _objectSpread2({}, DEFAULT_OPTIONS, {}, options);
   }, [options]);
-  var commands = useRef((_useRef = {}, _defineProperty(_useRef, SETUP, []), _defineProperty(_useRef, DRAW, []), _defineProperty(_useRef, PRELOAD, []), _useRef));
+  var rootState = useRef((_useRef = {}, _defineProperty(_useRef, SETUP, []), _defineProperty(_useRef, DRAW, []), _defineProperty(_useRef, PRELOAD, []), _defineProperty(_useRef, "layers", []), _useRef));
   useEffect(function () {
     return function () {
       if (p5Instance) p5Instance.remove();
@@ -2073,7 +2073,7 @@ var P5 = function P5(_ref) {
           // There is probably a better workaround, but this will do for now...
 
           setTimeout(function () {
-            commands.current[SETUP].forEach(function (command) {
+            rootState.current[SETUP].forEach(function (command) {
               return command();
             });
             __ready.current = true;
@@ -2087,7 +2087,7 @@ var P5 = function P5(_ref) {
             p.clear();
           }
 
-          commands.current[DRAW].forEach(function (command) {
+          rootState.current[DRAW].forEach(function (command) {
             command();
           });
         };
@@ -2099,8 +2099,13 @@ var P5 = function P5(_ref) {
     getOptions: function getOptions() {
       return canvasOptions;
     },
-    getCommands: function getCommands() {
-      return commands.current;
+    getRootState: function getRootState() {
+      return rootState.current;
+    },
+    findLayer: function findLayer(id) {
+      return rootState.current.layers.find(function (layer) {
+        return layer.__id === id;
+      });
     },
     defineCommandFactory: function defineCommandFactory(key) {
       return function (command) {
@@ -2108,7 +2113,7 @@ var P5 = function P5(_ref) {
         var idx = arguments.length > 2 ? arguments[2] : undefined;
 
         if (typeof idx !== 'number') {
-          idx = commands.current[key].length;
+          idx = rootState.current[key].length;
         }
 
         var handler = function handler() {
@@ -2117,15 +2122,15 @@ var P5 = function P5(_ref) {
 
         handler.__type = command.__type;
 
-        if (commands.current[key].length <= 0) {
-          commands.current[key].push(handler);
+        if (rootState.current[key].length <= 0) {
+          rootState.current[key].push(handler);
         } else {
-          commands.current[key].splice(idx, 0, handler);
+          rootState.current[key].splice(idx, 0, handler);
         }
 
         return function () {
-          var index = commands.current[key].indexOf(handler);
-          commands.current[key] = commands.current[key].filter(function (c) {
+          var index = rootState.current[key].indexOf(handler);
+          rootState.current[key] = rootState.current[key].filter(function (c) {
             return c !== handler;
           });
           return index;
@@ -2237,11 +2242,19 @@ function LayerComponent(_ref) {
   var pg = useRef(null);
   var applyCallbacks = useRef([]);
   var ctx = useContext(P5RenderContext);
+  var globalCtx = useContext(P5Context);
   useEffect(function () {
     if (isStatic) {
       setLayerImage(null);
     }
   }, [children, opacity, blendMode, isStatic]);
+  useEffect(function () {
+    return function () {
+      ctx.getRootState().layers = ctx.getRootState().layers.filter(function (layer) {
+        return layer.__id !== id;
+      });
+    };
+  }, [ctx, id]);
 
   var api = _objectSpread2({}, ctx, {
     get p5Instance() {
@@ -2274,6 +2287,8 @@ function LayerComponent(_ref) {
 
     pg.current.mouseX = p.mouseX + handleValueOrFunction(p, x);
     pg.current.mouseY = p.mouseY + handleValueOrFunction(p, y);
+    pg.current.pmouseX = p.pmouseX + handleValueOrFunction(p, x);
+    pg.current.pmouseY = p.pmouseY + handleValueOrFunction(p, y);
     var contentToApply = pg.current;
 
     if (applyCallbacks.current.length > 0) {
@@ -2330,8 +2345,10 @@ function LayerComponent(_ref) {
     }
 
     pg.current.__isLayer = true;
+    pg.current.__isStatic = isStatic;
     pg.current.__id = id;
-  }, [ctx.rootP5Instance, height, id, width]);
+    ctx.getRootState().layers.push(pg.current);
+  }, [ctx.rootP5Instance, height, id, isStatic, width]);
   return /*#__PURE__*/React.createElement(P5RenderContext.Provider, {
     value: api
   }, /*#__PURE__*/React.createElement(React.Fragment, null, !layerImage && /*#__PURE__*/React.createElement(Command, {
@@ -2475,7 +2492,7 @@ function RectangleComponent(_ref) {
 }
 
 RectangleComponent.displayName = 'Rectangle';
-var Rectangle = lib_2(RectangleComponent).description("The `<Rectangle>` component allows you to draw an rectangle to the screen. \n\nIt is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/rectangle).");
+var Rectangle = lib_2(RectangleComponent).description("The `<Rectangle>` component allows you to draw an rectangle to the screen. \n\nIt is the equivalent of calling [p5.rectangle()](https://p5js.org/reference/#/p5/rectangle).");
 Rectangle.propTypes = _objectSpread2({
   x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
   y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,
@@ -2722,7 +2739,7 @@ function EllipseComponent(_ref) {
 }
 
 EllipseComponent.displayName = 'Ellipse';
-var Ellipse = lib_2(EllipseComponent).description("The `<Ellipse>` component allows you to draw an ellipse to the screen. \n\nIt is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/ellipse).");
+var Ellipse = lib_2(EllipseComponent).description("The `<Ellipse>` component allows you to draw an ellipse to the screen. \n\nIt is the equivalent of calling [p5.ellipse()](https://p5js.org/reference/#/p5/ellipse).");
 Ellipse.propTypes = _objectSpread2({
   x: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The x-coordinate of the shape').isRequired,
   y: lib_1.oneOfType([lib_1.number, lib_1.func]).description('The y-coordinate of the shape').isRequired,

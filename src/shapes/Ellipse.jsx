@@ -24,7 +24,7 @@ EllipseComponent.displayName = 'Ellipse';
 export const Ellipse = describe(EllipseComponent)
     .description(`The \`<Ellipse>\` component allows you to draw an ellipse to the screen. 
 
-It is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/ellipse).`);
+It is the equivalent of calling [p5.ellipse()](https://p5js.org/reference/#/p5/ellipse).`);
 
 Ellipse.propTypes = {
     x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(

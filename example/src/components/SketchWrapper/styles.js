@@ -5,7 +5,7 @@ export const useStyles = makeStyles(theme => {
         canvas: {
             display: 'block',
             boxShadow: theme.shadows[4],
-            margin: `${theme.spacing(2)}px 0`,
+            margin: `${theme.spacing(2)}px auto`,
         },
         description: {
             '& strong': {

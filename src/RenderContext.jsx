@@ -4,14 +4,12 @@ import { SETUP, DRAW, P5Context } from './P5';
 export const P5RenderContext = createContext(null);
 
 export const RenderContextProvider = ({ step, children }) => {
-    const { p5Instance, defineCommandFactory, getOptions } = useContext(
-        P5Context
-    );
+    const { p5Instance, defineCommandFactory, ...ctx } = useContext(P5Context);
     const api = {
         defineCommand: defineCommandFactory(step),
         rootP5Instance: p5Instance,
         p5Instance,
-        getOptions,
+        ...ctx,
     };
 
     if (!p5Instance) return null;

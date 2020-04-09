@@ -35,7 +35,7 @@ export function SketchWrapper({
 
     const preview = useMemo(
         () => (
-            <P5 options={state} className="canvas">
+            <>
                 <Setup>
                     <Canvas
                         width={400}
@@ -45,9 +45,9 @@ export function SketchWrapper({
                     {setup}
                 </Setup>
                 <Draw>{draw}</Draw>
-            </P5>
+            </>
         ),
-        [classes.canvas, draw, setup, state]
+        [classes.canvas, draw, setup]
     );
     const highlightedCode = useMemo(() => {
         return prism.highlight(
@@ -59,61 +59,63 @@ export function SketchWrapper({
         <Card>
             <CardContent component={Box} display="flex">
                 <Box width={450}>
-                    {preview}
-                    <FormControlLabel
-                        label="Debug"
-                        control={
-                            <Switch
-                                checked={state.debug}
-                                onChange={toggleDebug}
-                                name="debug-switch"
-                            />
-                        }
-                    />
+                    <P5 options={state} className="canvas">
+                        {preview}
+                        <FormControlLabel
+                            label="Debug"
+                            control={
+                                <Switch
+                                    checked={state.debug}
+                                    onChange={toggleDebug}
+                                    name="debug-switch"
+                                />
+                            }
+                        />
 
-                    <Tooltip
-                        title={showCode ? 'Hide code' : 'Show code'}
-                        placement="top-start"
-                        arrow
-                    >
-                        <IconButton
-                            aria-label="Show code"
-                            color="primary"
-                            onClick={toggleCode}
-                        >
-                            <Code />
-                        </IconButton>
-                    </Tooltip>
-                    {githubLink && (
                         <Tooltip
-                            title="View source on github"
+                            title={showCode ? 'Hide code' : 'Show code'}
                             placement="top-start"
                             arrow
                         >
                             <IconButton
-                                aria-label="View source on github"
+                                aria-label="Show code"
                                 color="primary"
-                                component={Link}
-                                href={githubLink}
-                                target="_blank"
-                                rel="noopener"
+                                onClick={toggleCode}
                             >
-                                <LinkIcon />
+                                <Code />
                             </IconButton>
                         </Tooltip>
-                    )}
+                        {githubLink && (
+                            <Tooltip
+                                title="View source on github"
+                                placement="top-start"
+                                arrow
+                            >
+                                <IconButton
+                                    aria-label="View source on github"
+                                    color="primary"
+                                    component={Link}
+                                    href={githubLink}
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    <LinkIcon />
+                                </IconButton>
+                            </Tooltip>
+                        )}
 
-                    {showCode && (
-                        <pre className="language-jsx">
-                            <code
-                                className="language-jsx"
-                                dangerouslySetInnerHTML={{
-                                    __html: highlightedCode,
-                                }}
-                            ></code>
-                        </pre>
-                    )}
-                    <Box>{children}</Box>
+                        {showCode && (
+                            <pre className="language-jsx">
+                                <code
+                                    className="language-jsx"
+                                    dangerouslySetInnerHTML={{
+                                        __html: highlightedCode,
+                                    }}
+                                ></code>
+                            </pre>
+                        )}
+                        <Box>{children}</Box>
+                    </P5>
                 </Box>
 
                 <Box ml={4} px={2} flex={1} className={classes.description}>

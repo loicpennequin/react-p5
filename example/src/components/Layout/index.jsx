@@ -31,7 +31,7 @@ function RouteList({ routes, prefix = '' }) {
             <ListItemText
                 primary={
                     <>
-                        {route.name} {route.hot && <Whatshot />}
+                        {route.label || route.name} {route.hot && <Whatshot />}
                     </>
                 }
             />

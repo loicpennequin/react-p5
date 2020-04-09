@@ -20,46 +20,42 @@ const routes = {
     components: [
         {
             name: 'Body',
-            label: 'Body',
             path: '/body',
             hot: true,
         },
         {
             name: 'Circle',
-            label: 'Circle',
             path: '/circle',
         },
         {
             name: 'Ellipse',
-            label: 'Ellipse',
             path: '/ellipse',
         },
         {
             name: 'Layer',
-            label: 'Layer',
             path: '/layer',
             hot: true,
         },
         {
             name: 'Line',
-            label: 'Line',
             path: '/line',
         },
         {
+            name: 'Point',
+            path: '/point',
+        },
+        {
             name: 'Rectangle',
-            label: 'Rectangle',
             path: '/rectangle',
         },
         {
             name: 'Square',
-            label: 'Square',
             path: '/square',
         },
     ],
     other: [
         {
             name: 'Home',
-            label: 'Home',
             path: '/',
         },
         {

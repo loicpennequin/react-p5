@@ -1,7 +1,38 @@
-import React, { useRef, useCallback } from 'react';
-import { Background, Circle, Layer, Line, Command } from 'p5-react';
+import React, { useRef, useContext, useCallback } from 'react';
+import { Background, Layer, Line, Command, P5Context } from 'p5-react';
 import { SketchWrapper } from '../components/SketchWrapper';
+import { useTheme } from '@material-ui/core/styles';
+import { Button, ButtonGroup, Box } from '@material-ui/core';
 
+const SketchOptions = () => {
+    const { findLayer } = useContext(P5Context);
+    const clearBlack = () => {
+        const layer = findLayer('blackLine');
+        if (layer) {
+            layer.clear();
+        }
+    };
+    const clearRed = () => {
+        const layer = findLayer('redLine');
+        if (layer) {
+            layer.clear();
+        }
+    };
+
+    const clearBoth = () => {
+        clearBlack();
+        clearRed();
+    };
+    return (
+        <Box display="flex" flexDirection="column" alignItems="center">
+            <ButtonGroup size="small" variant="contained" color="primary">
+                <Button onClick={clearBlack}>Clear Black Line</Button>
+                <Button onClick={clearRed}>Clear Red Line</Button>
+                <Button onClick={clearBoth}>Clear both lines</Button>
+            </ButtonGroup>
+        </Box>
+    );
+};
 export default function LayerPage() {
     const lineY = useRef(0);
     const updateLinePosition = useCallback(p => {
@@ -9,6 +40,12 @@ export default function LayerPage() {
         if (lineY.current > p.height) lineY.current = 0;
     }, []);
 
+    const theme = useTheme();
+
+    const getStrokeWeight = useCallback(p => {
+        const distance = p.dist(p.mouseX, p.mouseY, p.pmouseX, p.pmouseY);
+        return p.map(distance, 0, 30, 1, 8);
+    }, []);
     return (
         <SketchWrapper
             title="Layer"
@@ -18,24 +55,33 @@ export default function LayerPage() {
             draw={
                 <>
                     <Command command={updateLinePosition} />
-                    <Background color={0} />
+                    <Background color={255} />
                     <Line
                         from={p => [0, lineY.current]}
                         to={p => [p.width, lineY.current]}
-                        stroke={[255, 0, 0]}
+                        fill={theme.palette.primary.main}
                         strokeWeight={2}
                     />
-                    <Layer id="layer" autoClear={false}>
-                        <Circle
-                            x={p => p.mouseX}
-                            y={p => p.mouseY}
-                            size={20}
-                            fill={255}
-                            noStroke
+                    <Layer id="blackLine" autoClear={false}>
+                        <Line
+                            from={p => [p.pmouseX, p.pmouseY]}
+                            to={p => [p.mouseX, p.mouseY]}
+                            strokeWeight={getStrokeWeight}
+                            stroke={0}
+                        />
+                    </Layer>
+                    <Layer id="redLine" autoClear={false}>
+                        <Line
+                            from={p => [p.width - p.pmouseX, p.pmouseY]}
+                            to={p => [p.width - p.mouseX, p.mouseY]}
+                            strokeWeight={getStrokeWeight}
+                            stroke={theme.palette.primary.main}
                         />
                     </Layer>
                 </>
             }
-        ></SketchWrapper>
+        >
+            <SketchOptions />
+        </SketchWrapper>
     );
 }

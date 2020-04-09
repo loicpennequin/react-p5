@@ -47,10 +47,11 @@ export const P5 = ({ options, children, ...props }) => {
     const canvasOptions = useMemo(() => ({ ...DEFAULT_OPTIONS, ...options }), [
         options,
     ]);
-    const commands = useRef({
+    const rootState = useRef({
         [SETUP]: [],
         [DRAW]: [],
         [PRELOAD]: [],
+        layers: [],
     });
 
     useEffect(() => {
@@ -73,7 +74,7 @@ export const P5 = ({ options, children, ...props }) => {
                         // the setup function is executed before the <Commands /> inside <Setup /> had time to define the commands
                         // There is probably a better workaround, but this will do for now...
                         setTimeout(() => {
-                            commands.current[SETUP].forEach(command =>
+                            rootState.current[SETUP].forEach(command =>
                                 command()
                             );
                             __ready.current = true;
@@ -85,7 +86,7 @@ export const P5 = ({ options, children, ...props }) => {
                         if (canvasOptions.clearOnDraw) {
                             p.clear();
                         }
-                        commands.current[DRAW].forEach(command => {
+                        rootState.current[DRAW].forEach(command => {
                             command();
                         });
                     };
@@ -102,24 +103,26 @@ export const P5 = ({ options, children, ...props }) => {
     const api = {
         p5Instance,
         getOptions: () => canvasOptions,
-        getCommands: () => commands.current,
+        getRootState: () => rootState.current,
+        findLayer: id =>
+            rootState.current.layers.find(layer => layer.__id === id),
         defineCommandFactory: key => (command, ctx = p5Instance, idx) => {
             if (typeof idx !== 'number') {
-                idx = commands.current[key].length;
+                idx = rootState.current[key].length;
             }
 
             const handler = () => {
                 return command(typeof ctx === 'function' ? ctx() : ctx);
             };
             handler.__type = command.__type;
-            if (commands.current[key].length <= 0) {
-                commands.current[key].push(handler);
+            if (rootState.current[key].length <= 0) {
+                rootState.current[key].push(handler);
             } else {
-                commands.current[key].splice(idx, 0, handler);
+                rootState.current[key].splice(idx, 0, handler);
             }
             return () => {
-                const index = commands.current[key].indexOf(handler);
-                commands.current[key] = commands.current[key].filter(
+                const index = rootState.current[key].indexOf(handler);
+                rootState.current[key] = rootState.current[key].filter(
                     c => c !== handler
                 );
                 return index;

@@ -6,6 +6,7 @@ import React, {
     useCallback,
 } from 'react';
 import { Command } from './Command';
+import { P5Context } from './P5';
 import { P5RenderContext } from './RenderContext';
 import { handleValueOrFunction } from './utils/handleValueOrFunction';
 import { describe, PropTypes } from 'react-desc';
@@ -29,12 +30,22 @@ function LayerComponent({
     const pg = useRef(null);
     const applyCallbacks = useRef([]);
     const ctx = useContext(P5RenderContext);
+    const globalCtx = useContext(P5Context);
 
     useEffect(() => {
         if (isStatic) {
             setLayerImage(null);
         }
     }, [children, opacity, blendMode, isStatic]);
+
+    useEffect(
+        () => () => {
+            ctx.getRootState().layers = ctx
+                .getRootState()
+                .layers.filter(layer => layer.__id !== id);
+        },
+        [ctx, id]
+    );
 
     const api = {
         ...ctx,
@@ -70,6 +81,8 @@ function LayerComponent({
 
         pg.current.mouseX = p.mouseX + handleValueOrFunction(p, x);
         pg.current.mouseY = p.mouseY + handleValueOrFunction(p, y);
+        pg.current.pmouseX = p.pmouseX + handleValueOrFunction(p, x);
+        pg.current.pmouseY = p.pmouseY + handleValueOrFunction(p, y);
 
         let contentToApply = pg.current;
 
@@ -140,9 +153,11 @@ function LayerComponent({
                 };
             }
             pg.current.__isLayer = true;
+            pg.current.__isStatic = isStatic;
             pg.current.__id = id;
+            ctx.getRootState().layers.push(pg.current);
         },
-        [ctx.rootP5Instance, height, id, width]
+        [ctx.rootP5Instance, height, id, isStatic, width]
     );
 
     return (

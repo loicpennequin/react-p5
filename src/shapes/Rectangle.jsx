@@ -24,7 +24,7 @@ RectangleComponent.displayName = 'Rectangle';
 export const Rectangle = describe(RectangleComponent)
     .description(`The \`<Rectangle>\` component allows you to draw an rectangle to the screen. 
 
-It is the equivalent of calling [p5.arc()](https://p5js.org/reference/#/p5/rectangle).`);
+It is the equivalent of calling [p5.rectangle()](https://p5js.org/reference/#/p5/rectangle).`);
 
 Rectangle.propTypes = {
     x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
