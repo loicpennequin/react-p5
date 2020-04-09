@@ -1997,12 +1997,14 @@ var RenderContextProvider = function RenderContextProvider(_ref) {
     value: api
   }, children);
 };
+RenderContextProvider.displayName = 'RenderContextProvider';
 var Setup = function Setup(_ref2) {
   var children = _ref2.children;
   return /*#__PURE__*/React__default.createElement(RenderContextProvider, {
     step: SETUP
   }, children);
 };
+Setup.displayName = 'Setup';
 var Draw = function Draw(_ref3) {
   var children = _ref3.children;
 
@@ -2013,6 +2015,7 @@ var Draw = function Draw(_ref3) {
     step: DRAW
   }, children, getOptions().debug && /*#__PURE__*/React__default.createElement(Debug, null));
 };
+Draw.displayName = 'Draw';
 
 p5.disableFriendlyErrors = true;
 var SETUP = 'setup';
@@ -2149,6 +2152,7 @@ var P5 = function P5(_ref) {
     value: api
   }, children);
 };
+P5.displayName = 'P5';
 
 function CanvasComponent(_ref) {
   var width = _ref.width,
@@ -2199,7 +2203,7 @@ var handleValueOrFunction = function handleValueOrFunction(p) {
   return returnValue;
 };
 
-function Background(_ref) {
+function BackgroundComponent(_ref) {
   var color = _ref.color,
       children = _ref.children,
       props = _objectWithoutProperties(_ref, ["color", "children"]);
@@ -2211,6 +2215,12 @@ function Background(_ref) {
     command: command
   }), children);
 }
+
+BackgroundComponent.displayName = 'Background';
+var Background = lib_2(BackgroundComponent).descriptions('todo');
+Background.propTypes = {
+  color: lib_1.oneOfType([lib_1.func, lib_1.number, lib_1.array])
+};
 
 var EMPTY_ARRAY = Object.freeze([]);
 

@@ -19,7 +19,7 @@ function BackgroundComponent({ color, children, ...props }) {
 }
 BackgroundComponent.displayName = 'Background';
 
-export const Background = describe(BackgroundComponent).descriptions('todo');
+export const Background = describe(BackgroundComponent).description('todo');
 
 Background.propTypes = {
     color: PropTypes.oneOfType([
