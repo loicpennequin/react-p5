@@ -7,6 +7,11 @@ export const useStyles = makeStyles(theme => {
             boxShadow: theme.shadows[4],
             margin: `${theme.spacing(2)}px auto`,
         },
+        cardContent: {
+            [theme.breakpoints.down('sm')]: {
+                padding: theme.spacing(1),
+            },
+        },
         description: {
             '& strong': {
                 color: theme.palette.primary.light,
@@ -22,7 +27,7 @@ export const useStyles = makeStyles(theme => {
 
                 '&:first-of-type': {
                     ...theme.typography.h3,
-                    borderBottom: `solid 3px ${theme.palette.primary}`,
+                    borderBottom: `solid 3px ${theme.palette.primary.main}`,
                 },
             },
             '& code': {

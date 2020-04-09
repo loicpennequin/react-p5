@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
+import routes from '../../routes';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { List, ListItem, ListItemText, Collapse } from '@material-ui/core';
 import { ExpandLess, ExpandMore, Whatshot } from '@material-ui/icons';
-import routes from '../../routes';
-
 import { useStyles } from './styles';
 
-function RouteList({ routes, prefix = '' }) {
+function RouteList({ routes, prefix = '', onClick = () => {} }) {
     const { pathname } = useLocation();
 
     return routes.map(route => (
@@ -16,6 +16,7 @@ function RouteList({ routes, prefix = '' }) {
             selected={pathname === `${route.path}`}
             component={RouterLink}
             to={`${prefix}${route.path}`}
+            onClick={onClick}
         >
             <ListItemText
                 primary={
@@ -28,7 +29,7 @@ function RouteList({ routes, prefix = '' }) {
     ));
 }
 
-export function SideBar(props) {
+export function SideBar({ onLinkClick, className, ...props }) {
     const [componentsOpen, setComponentsOpen] = useState(false);
     const [exemplesOpen, setExemplesOpen] = useState(false);
 
@@ -37,8 +38,12 @@ export function SideBar(props) {
     const toggleExemples = () => setExemplesOpen(!exemplesOpen);
 
     return (
-        <List component="nav" className={classes.root} {...props}>
-            <RouteList routes={routes.other} />
+        <List
+            component="nav"
+            className={clsx([classes.root, className])}
+            {...props}
+        >
+            <RouteList routes={routes.other} onClick={onLinkClick} />
 
             <ListItem button onClick={toggleComponents}>
                 <ListItemText primary="Components" />
@@ -50,6 +55,7 @@ export function SideBar(props) {
                     <RouteList
                         routes={routes.components}
                         prefix="/components"
+                        onClick={onLinkClick}
                     />
                 </List>
             </Collapse>
@@ -61,7 +67,11 @@ export function SideBar(props) {
 
             <Collapse in={exemplesOpen} timeout="auto" unmountOnExit>
                 <List component="div" className={classes.subList}>
-                    <RouteList routes={routes.examples} prefix="/examples" />
+                    <RouteList
+                        routes={routes.examples}
+                        prefix="/examples"
+                        onClick={onLinkClick}
+                    />
                 </List>
             </Collapse>
         </List>

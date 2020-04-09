@@ -6,5 +6,8 @@ export const useStyles = makeStyles(() => {
             color: 'inherit',
             textDecoration: 'none',
         },
+        drawer: {
+            width: 350,
+        },
     };
 });

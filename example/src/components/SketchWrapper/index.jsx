@@ -14,6 +14,7 @@ import {
     IconButton,
     Tooltip,
     Link,
+    useMediaQuery,
 } from '@material-ui/core';
 import jsxToString from 'react-element-to-jsx-string';
 import { Code, Link as LinkIcon } from '@material-ui/icons';
@@ -33,13 +34,16 @@ export function SketchWrapper({
     const toggleDebug = () => setState({ debug: !state.debug });
     const toggleCode = () => setShowCode(c => !c);
 
+    const isVerticalLayout = useMediaQuery(theme =>
+        theme.breakpoints.down('sm')
+    );
     const preview = useMemo(
         () => (
             <>
                 <Setup>
                     <Canvas
-                        width={400}
-                        height={400}
+                        width={350}
+                        height={350}
                         canvasClassName={classes.canvas}
                     />
                     {setup}
@@ -57,8 +61,16 @@ export function SketchWrapper({
     }, [preview]);
     return (
         <Card>
-            <CardContent component={Box} display="flex">
-                <Box width={450}>
+            <CardContent
+                component={Box}
+                display="flex"
+                flexDirection={isVerticalLayout ? 'column' : 'row'}
+                className={classes.cardContent}
+            >
+                <Box
+                    width={isVerticalLayout ? 'auto' : 450}
+                    order={isVerticalLayout ? 1 : 0}
+                >
                     <P5 options={state} className="canvas">
                         {preview}
                         <FormControlLabel
@@ -118,7 +130,12 @@ export function SketchWrapper({
                     </P5>
                 </Box>
 
-                <Box ml={4} px={2} flex={1} className={classes.description}>
+                <Box
+                    ml={!isVerticalLayout && 4}
+                    px={2}
+                    flex={1}
+                    className={classes.description}
+                >
                     <Markdown source={description} />
                 </Box>
             </CardContent>
