@@ -26,5 +26,5 @@ Background.propTypes = {
         PropTypes.func,
         PropTypes.number,
         PropTypes.array,
-    ]),
+    ]).description('the color to paint the background with'),
 };

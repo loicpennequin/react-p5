@@ -2217,7 +2217,7 @@ function BackgroundComponent(_ref) {
 }
 
 BackgroundComponent.displayName = 'Background';
-var Background = lib_2(BackgroundComponent).descriptions('todo');
+var Background = lib_2(BackgroundComponent).description('todo');
 Background.propTypes = {
   color: lib_1.oneOfType([lib_1.func, lib_1.number, lib_1.array])
 };
