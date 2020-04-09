@@ -9,10 +9,14 @@ import { Command } from './Command';
 import { P5Context } from './P5';
 import { P5RenderContext } from './RenderContext';
 import { handleValueOrFunction } from './utils/handleValueOrFunction';
-import { describe, PropTypes } from 'react-desc';
+import PropTypes from 'prop-types';
 
 const EMPTY_ARRAY = Object.freeze([]);
-function LayerComponent({
+
+/**
+ * Todo
+ */
+export function Layer({
     autoClear = true,
     children = null,
     blendMode = 'BLEND',
@@ -157,7 +161,7 @@ function LayerComponent({
             pg.current.__id = id;
             ctx.getRootState().layers.push(pg.current);
         },
-        [ctx.rootP5Instance, height, id, isStatic, width]
+        [ctx, height, id, isStatic, width]
     );
 
     return (
@@ -176,30 +180,30 @@ function LayerComponent({
         </P5RenderContext.Provider>
     );
 }
-LayerComponent.displayName = 'Layer';
-
-export const Layer = describe(LayerComponent).description(
-    'Todo Layer description'
-);
-
+Layer.displayName = 'Layer';
 Layer.propTypes = {
-    autoClear: PropTypes.bool.description('todo'),
-    blendMode: PropTypes.oneOfType([
-        PropTypes.func,
-        PropTypes.string,
-    ]).description('todo'),
-    opacity: PropTypes.number.description('todo'),
-    filters: PropTypes.array.description('todo'),
-    isStatic: PropTypes.bool.description('todo'),
-    applyFunction: PropTypes.func.description('todo'),
-    id: PropTypes.string.description('todo'),
-    x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The x-coordinate of the shape'
-    ),
-    y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The y-coordinate of the shape'
-    ),
-    size: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The size of the shape in pixels'
-    ),
+    /** todo */
+    autoClear: PropTypes.bool,
+    /** todo */
+    blendMode: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+    /** todo */
+    opacity: PropTypes.number,
+    /** todo */
+    filters: PropTypes.array,
+    /** todo */
+    isStatic: PropTypes.bool,
+    /** todo */
+    applyFunction: PropTypes.func,
+    /** todo */
+    id: PropTypes.string,
+    /** The x-coordinate of the layer */
+    x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
+    /** The y-coordinate of the layer */
+    y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
+    /** The width of the layer */
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
+    /** The height of the layer */
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
+    /** The size of the shape in pixels */
+    size: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
 };

@@ -1,9 +1,13 @@
 import React, { useRef, useCallback, useContext } from 'react';
 import { Command } from './Command';
 import { P5RenderContext } from './RenderContext';
-import { describe, PropTypes } from 'react-desc';
+import PropTypes from 'prop-types';
 
-function CanvasComponent({
+/**
+ * The <Canvas> component will create a new canvas for you to draw things on.
+ * It is the equivalent of calling [p5.createCanvas()](https://p5js.org/reference/#/p5/createCanvas)
+ */
+export function Canvas({
     width,
     height,
     renderer = 'P2D',
@@ -28,28 +32,16 @@ function CanvasComponent({
         </>
     );
 }
-CanvasComponent.displayName = 'Canvas';
-
-export const Canvas = describe(CanvasComponent)
-    .description(`The \`<Canvas>\` component will create a new canvas for you to draw things on.
-
-It is the equivalent of calling [p5.createCanvas()](https://p5js.org/reference/#/p5/createCanvas)
-`);
-
+Canvas.displayName = 'Canvas';
 Canvas.propTypes = {
-    width: PropTypes.oneOfType([PropTypes.func, PropTypes.number]).description(
-        'The width of the canvas in pixels'
-    ).isRequired,
-    height: PropTypes.oneOfType([PropTypes.func, PropTypes.number]).description(
-        'The width of the canvas in pixels'
-    ).isRequired,
-    renderer: PropTypes.oneOf(['P2D', 'WEBGL']).description(
-        'The renderer to be used for the canvas. Defaults to P2D'
-    ),
-    canvasClassName: PropTypes.string.description(
-        'The classname passed to created the canvas DOM element'
-    ),
-    canvasStyle: PropTypes.object.description(
-        'The stylepassed to the createdcanvas DOM element'
-    ),
+    /** The width of the canvas */
+    width: PropTypes.oneOfType([PropTypes.func, PropTypes.number]).isRequired,
+    /** The height of the canvas */
+    height: PropTypes.oneOfType([PropTypes.func, PropTypes.number]).isRequired,
+    /** The renderer to use. Defaults to `P2D` */
+    renderer: PropTypes.oneOf(['P2D', 'WEBGL']),
+    /** todo  */
+    canvasClassName: PropTypes.string,
+    /** todo  */
+    canvasStyle: PropTypes.object,
 };

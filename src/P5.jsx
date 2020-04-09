@@ -8,8 +8,10 @@ import React, {
 } from 'react';
 import p5 from 'p5';
 import { P5RenderContext } from './RenderContext';
+import PropTypes from 'prop-types';
 
 p5.disableFriendlyErrors = true;
+
 export const SETUP = 'setup';
 export const DRAW = 'draw';
 export const PRELOAD = 'preload';
@@ -41,6 +43,9 @@ const DEFAULT_OPTIONS = {
     pixelDensity: 1,
 };
 
+/**
+ * Todo
+ */
 export const P5 = ({ options, children, ...props }) => {
     const [p5Instance, setP5Instance] = useState(null);
     const __ready = useRef(false);
@@ -133,3 +138,16 @@ export const P5 = ({ options, children, ...props }) => {
     return <P5Context.Provider value={api}>{children}</P5Context.Provider>;
 };
 P5.displayName = 'P5';
+P5.propTypes = {
+    /** todo */
+    options: PropTypes.shape({
+        /** todo */
+        clearOnDraw: PropTypes.bool,
+        /** todo */
+        frameRate: PropTypes.number,
+        /** todo */
+        debug: PropTypes.bool,
+        /** todo */
+        pixelDensity: PropTypes.number,
+    }),
+};

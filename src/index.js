@@ -1,6 +1,6 @@
-export { P5Context, P5, useP5, useDraw } from './P5';
 export { P5RenderContext, Setup, Draw } from './RenderContext';
 export { Canvas } from './Canvas';
+export { P5Context, P5, useP5, useDraw } from './P5';
 export { Command } from './Command';
 export { Background } from './Background';
 export { Layer } from './Layer';

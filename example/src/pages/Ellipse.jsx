@@ -1,6 +1,6 @@
+import docs from '../assets/docs.generated.json';
 import React from 'react';
 import { SketchWrapper } from '../components/SketchWrapper';
-
 import { Ellipse } from 'p5-react';
 import { useTheme } from '@material-ui/core/styles';
 
@@ -9,7 +9,7 @@ export default function EllipsePage() {
 
     return (
         <SketchWrapper
-            description={Ellipse.toMarkdown()}
+            description={docs.Ellipse}
             githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/shapes/Ellipse.jsx"
             draw={
                 <>

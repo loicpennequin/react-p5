@@ -1,3 +1,4 @@
+import docs from '../assets/docs.generated.json';
 import React, { useState, useMemo } from 'react';
 import { BouncingObject, RandomPathObject } from '../models';
 import { SketchWrapper } from '../components/SketchWrapper';
@@ -30,7 +31,7 @@ export default function BodyPage() {
     return (
         <SketchWrapper
             title="Body"
-            description={Body.toMarkdown()}
+            description={docs.Body}
             githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/Body.jsx"
             draw={
                 <Body model={models[model]}>

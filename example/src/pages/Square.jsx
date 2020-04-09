@@ -1,3 +1,4 @@
+import docs from '../assets/docs.generated.json';
 import React from 'react';
 import { SketchWrapper } from '../components/SketchWrapper';
 import { Square } from 'p5-react';
@@ -8,7 +9,7 @@ export default function SquarePage() {
 
     return (
         <SketchWrapper
-            description={Square.toMarkdown()}
+            description={docs.Square}
             githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/shapes/Square.jsx"
             draw={
                 <>

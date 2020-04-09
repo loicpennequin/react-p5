@@ -1,3 +1,4 @@
+import docs from '../assets/docs.generated.json';
 import React, { useRef, useContext, useCallback } from 'react';
 import { Background, Layer, Line, Command, P5Context } from 'p5-react';
 import { SketchWrapper } from '../components/SketchWrapper';
@@ -50,7 +51,7 @@ export default function LayerPage() {
         <SketchWrapper
             title="Layer"
             githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/Layer.jsx"
-            description={Layer.toMarkdown()}
+            description={docs.Layer}
             setup={<Background color={0} />}
             draw={
                 <>

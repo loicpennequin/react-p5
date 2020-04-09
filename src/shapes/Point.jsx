@@ -2,9 +2,13 @@ import React, { useCallback } from 'react';
 import { Command } from '../Command';
 import { handleCommonProps, commonPropTypes } from '../utils/handleCommonProps';
 import { handleValueOrFunction } from '../utils/handleValueOrFunction';
-import { describe, PropTypes } from 'react-desc';
+import PropTypes from 'prop-types';
 
-function PointComponent({ x, y, children, ...props }) {
+/**
+ * The `<Point>` component allows you to draw a point to the screen.
+ * It is the equivalent of calling [p5.point()](https://p5js.org/reference/#/p5/point).`;
+ */
+export function Point({ x, y, children, ...props }) {
     const command = useCallback(
         p => {
             handleCommonProps(props, p);
@@ -19,19 +23,11 @@ function PointComponent({ x, y, children, ...props }) {
         </>
     );
 }
-PointComponent.displayName = 'Point';
-
-export const Point = describe(PointComponent)
-    .description(`The \`<Point>\` component allows you to draw a point to the screen. 
-
-It is the equivalent of calling [p5.point()](https://p5js.org/reference/#/p5/point).`);
-
+Point.displayName = 'Point';
 Point.propTypes = {
-    x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The x-coordinate of the shape'
-    ).isRequired,
-    y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The y-coordinate of the shape'
-    ).isRequired,
+    /** The x-coordinate of the shape */
+    x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).isRequired,
+    /** The y-coordinate of the shape */
+    y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).isRequired,
     ...commonPropTypes,
 };

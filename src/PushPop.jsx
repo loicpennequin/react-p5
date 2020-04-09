@@ -3,7 +3,8 @@ import { Command } from './Command';
 import { handleCommonProps, commonPropTypes } from './utils/handleCommonProps';
 import { describe } from 'react-desc';
 
-function PushPopComponent({ children, ...props }) {
+/** Todo */
+export function PushPop({ children, ...props }) {
     const push = useCallback(
         p => {
             p.push();
@@ -23,8 +24,4 @@ function PushPopComponent({ children, ...props }) {
         </>
     );
 }
-PushPopComponent.displayName = 'PushPop';
-
-export const PushPop = describe(PushPopComponent).description('Todo');
-
 PushPop.propTypes = commonPropTypes;

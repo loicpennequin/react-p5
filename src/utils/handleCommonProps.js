@@ -1,5 +1,5 @@
 import { handleValueOrFunction } from './handleValueOrFunction';
-import { PropTypes } from 'react-desc';
+import PropTypes from 'prop-types';
 
 export function handleCommonProps(props, p) {
     const applyProp = propName => {
@@ -34,9 +34,7 @@ export function handleCommonProps(props, p) {
 }
 
 const generate = (name, ...propTypes) => ({
-    [name]: PropTypes.oneOfType([PropTypes.func, ...propTypes]).description(
-        `See [${name}](https://p5js.org/reference/#/p5/${name})`
-    ),
+    [name]: PropTypes.oneOfType([PropTypes.func, ...propTypes]),
 });
 export const commonPropTypes = Object.assign(
     {},
@@ -71,15 +69,11 @@ export const commonPropTypes = Object.assign(
         ])
     ),
     {
-        noFill: PropTypes.bool.description(
-            `See [noFill](https://p5js.org/reference/#/p5/noFill)`
-        ),
-        noStroke: PropTypes.bool.description(
-            `See [noStroke](https://p5js.org/reference/#/p5/noStroke)`
-        ),
+        noFill: PropTypes.bool,
+        noStroke: PropTypes.bool,
     },
     generate('strokeJoin', PropTypes.oneOf(['miter', 'bevel', 'round'])),
-    generate('strokeJoin', PropTypes.oneOf(['round', 'square', 'project'])),
+    generate('strokeCap', PropTypes.oneOf(['round', 'square', 'project'])),
     generate('strokeWeight', PropTypes.number),
     generate('translate', PropTypes.array),
     generate('rotate', PropTypes.number, PropTypes.array),

@@ -4,7 +4,6 @@ import prism from 'prismjs';
 import 'prismjs/components/prism-jsx';
 import { P5, Setup, Draw, Canvas } from 'p5-react';
 import { appContext } from '../../App';
-import Markdown from 'react-markdown';
 import {
     Card,
     CardContent,
@@ -19,6 +18,7 @@ import {
 import jsxToString from 'react-element-to-jsx-string';
 import { Code, Link as LinkIcon } from '@material-ui/icons';
 import { useStyles } from './styles';
+import { ComponentDescription } from '../ComponentDescription';
 
 export function SketchWrapper({
     children,
@@ -136,7 +136,7 @@ export function SketchWrapper({
                     flex={1}
                     className={classes.description}
                 >
-                    <Markdown source={description} />
+                    <ComponentDescription description={description} />
                 </Box>
             </CardContent>
         </Card>

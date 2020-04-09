@@ -2,9 +2,13 @@ import React, { useCallback } from 'react';
 import { Command } from '../Command';
 import { handleCommonProps, commonPropTypes } from '../utils/handleCommonProps';
 import { handleValueOrFunction } from '../utils/handleValueOrFunction';
-import { describe, PropTypes } from 'react-desc';
+import PropTypes from 'prop-types';
 
-function EllipseComponent({ x, y, width, height, children, ...props }) {
+/**
+ * The `<Ellipse>` component allows you to draw a ellipse to the screen.
+ * It is the equivalent of calling [p5.ellipse()](https://p5js.org/reference/#/p5/ellipse).`;
+ */
+export function Ellipse({ x, y, width, height, children, ...props }) {
     const command = useCallback(
         p => {
             handleCommonProps(props, p);
@@ -19,25 +23,15 @@ function EllipseComponent({ x, y, width, height, children, ...props }) {
         </>
     );
 }
-EllipseComponent.displayName = 'Ellipse';
-
-export const Ellipse = describe(EllipseComponent)
-    .description(`The \`<Ellipse>\` component allows you to draw an ellipse to the screen. 
-
-It is the equivalent of calling [p5.ellipse()](https://p5js.org/reference/#/p5/ellipse).`);
-
+Ellipse.displayName = 'Ellipse';
 Ellipse.propTypes = {
-    x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The x-coordinate of the shape'
-    ).isRequired,
-    y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The y-coordinate of the shape'
-    ).isRequired,
-    width: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The width of the shape in pixels'
-    ).isRequired,
-    height: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).description(
-        'The width of the shape in pixels'
-    ).isRequired,
+    /** The x-coordinate of the shape */
+    x: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).isRequired,
+    /** The Y-coordinate of the shape */
+    y: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).isRequired,
+    /** The width of the shape in pixels */
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).isRequired,
+    /** The height of the shape in pixels */
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.func]).isRequired,
     ...commonPropTypes,
 };

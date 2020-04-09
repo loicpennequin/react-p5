@@ -1,6 +1,6 @@
+import docs from '../assets/docs.generated.json';
 import React from 'react';
 import { SketchWrapper } from '../components/SketchWrapper';
-
 import { Circle } from 'p5-react';
 import { useTheme } from '@material-ui/core/styles';
 
@@ -9,7 +9,7 @@ export default function CirclePage() {
 
     return (
         <SketchWrapper
-            description={Circle.toMarkdown()}
+            description={docs.Circle}
             githubLink="https://github.com/loicpennequin/react-p5/blob/master/src/shapes/Circle.jsx"
             draw={
                 <>

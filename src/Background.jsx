@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { Command } from './Command';
 import { handleValueOrFunction } from './utils/handleValueOrFunction';
-import { describe, PropTypes } from 'react-desc';
+import PropTypes from 'prop-types';
 
-function BackgroundComponent({ color, children, ...props }) {
+/** todo */
+export function Background({ color, children, ...props }) {
     const command = useCallback(
         p => {
             p.background(handleValueOrFunction(p, color));
@@ -17,14 +18,13 @@ function BackgroundComponent({ color, children, ...props }) {
         </>
     );
 }
-BackgroundComponent.displayName = 'Background';
-
-export const Background = describe(BackgroundComponent).description('todo');
+Background.displayName = 'Background';
 
 Background.propTypes = {
+    /** todo */
     color: PropTypes.oneOfType([
         PropTypes.func,
         PropTypes.number,
         PropTypes.array,
-    ]).description('the color to paint the background with'),
+    ]),
 };
