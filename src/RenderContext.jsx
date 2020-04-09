@@ -20,12 +20,15 @@ export const RenderContextProvider = ({ step, children }) => {
         </P5RenderContext.Provider>
     );
 };
+RenderContextProvider.displayName = 'RenderContextProvider';
 
 export const Setup = ({ children }) => {
     return (
         <RenderContextProvider step={SETUP}>{children}</RenderContextProvider>
     );
 };
+Setup.displayName = 'Setup';
+
 export const Draw = ({ children }) => {
     const { getOptions } = useContext(P5Context);
     return (
@@ -35,3 +38,4 @@ export const Draw = ({ children }) => {
         </RenderContextProvider>
     );
 };
+Draw.displayName = 'Draw';

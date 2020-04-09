@@ -132,3 +132,4 @@ export const P5 = ({ options, children, ...props }) => {
 
     return <P5Context.Provider value={api}>{children}</P5Context.Provider>;
 };
+P5.displayName = 'P5';
