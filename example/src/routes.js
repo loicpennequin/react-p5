@@ -61,7 +61,7 @@ const routes = {
         {
             name: 'GettingStarted',
             label: 'Getting Started',
-            path: '/',
+            path: '/getting-started',
         },
     ],
 };

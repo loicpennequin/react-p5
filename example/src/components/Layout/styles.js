@@ -12,19 +12,5 @@ export const useStyles = makeStyles(theme => {
         header: {
             gridColumn: 'span 2',
         },
-        headerTitle: {
-            color: 'inherit',
-            textDecoration: 'none',
-        },
-        headerLinks: {
-            marginLeft: 'auto',
-        },
-        list: {
-            color: theme.palette.primary.main,
-            backgroundColor: theme.palette.background.paper,
-        },
-        subList: {
-            paddingLeft: theme.spacing(2),
-        },
     };
 });
